@@ -6,6 +6,6 @@ default_permissions:
   checks: write
   metadata: read
 name: In Solidarity
-url: jpoehnelt.github.io/solidarity
-description: Helping developers use racially neutral language.
+url: https://github.com/jpoehnelt/in-solidarity-bot
+description: Helping developers use inclusive language.
 public: false
