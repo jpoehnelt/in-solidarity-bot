@@ -14,7 +14,7 @@
     "probot-app"
   ],
   "scripts": {
-    "prepare": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json",
     "start": "probot run ./dist/index.js",
     "test": "jest --passWithNoTests"
   },
@@ -36,7 +36,7 @@
     "typescript": "^3.9.7"
   },
   "engines": {
-    "node": ">= 12.8.1"
+    "node": ">=12.8.1"
   },
   "jest": {
     "testEnvironment": "node"

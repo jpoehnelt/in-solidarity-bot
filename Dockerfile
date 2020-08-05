@@ -2,6 +2,6 @@ FROM node
 
 COPY . .
 
-RUN npm i
+RUN npm i && npm run build
 
 ENTRYPOINT [ "npm", "start" ]

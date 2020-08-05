@@ -6,6 +6,7 @@ module.exports = async (app: Application) => {
   app.on(
     [
       "pull_request.opened",
+      "pull_request.reopened",
       "pull_request.synchronize",
     ],
     async (context: Context) => {

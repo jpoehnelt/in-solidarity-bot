@@ -28,7 +28,7 @@ export class Solidarity {
     this.logger = logger;
   }
   get headSha(): string {
-    return this.context.payload.after;
+    return this.context.payload.pull_request.head.sha;
   }
 
   get checkOptions() {
