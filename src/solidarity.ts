@@ -31,10 +31,17 @@ export class Solidarity {
     return this.context.payload.pull_request.head.sha;
   }
 
+  get owner(): string {
+    return this.context.payload.repository.owner.login;
+  }
+
+  get repo(): string {
+    return this.context.payload.repository.name;
+  }
   get checkOptions() {
     return {
-      owner: this.context.payload.repository.owner.login,
-      repo: this.context.payload.repository.name,
+      owner: this.owner,
+      repo: this.repo,
       head_sha: this.headSha,
       name: this.name,
     };
@@ -113,6 +120,14 @@ export class Solidarity {
       output.title = "Success";
       conclusion = Conclusion.SUCCESS;
     }
+
+    this.logger.info({
+      conclusion,
+      repo,
+      owner,
+      pull_number: this.context.payload.number,
+      sha: this.headSha,
+    });
 
     return { conclusion, output };
   }
