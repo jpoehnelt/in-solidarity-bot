@@ -10,6 +10,8 @@
 
 ![](./static/screenshot.png)
 
+The bot can be installed at https://github.com/apps/in-solidarity.
+
 ## Setup
 
 ```sh
