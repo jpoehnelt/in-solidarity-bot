@@ -9,9 +9,9 @@ steps:
     - --keyring=in-solidarity-bot
     - --key=github-app-key
   - name: "gcr.io/cloud-builders/docker"
-    args: ["build", "-t", "gcr.io/$PROJECT_ID/in-solidarity-bot:$TAG_NAME", "."]
+    args: ["build", "-t", "gcr.io/$PROJECT_ID/in-solidarity-bot:$COMMIT_SHA", "."]
   - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/$PROJECT_ID/in-solidarity-bot:$TAG_NAME"]
+    args: ["push", "gcr.io/$PROJECT_ID/in-solidarity-bot:$COMMIT_SHA"]
   - name: "gcr.io/cloud-builders/gcloud"
     args:
       [
@@ -19,13 +19,13 @@ steps:
         "deploy",
         "in-solidarity-bot",
         "--image",
-        "gcr.io/$PROJECT_ID/in-solidarity-bot:$TAG_NAME",
+        "gcr.io/$PROJECT_ID/in-solidarity-bot:$COMMIT_SHA",
         "--region",
         "us-central1",
         "--platform",
         "managed",
         "--labels", 
-        "tag=$TAG_NAME"
+        "sha=$COMMIT_SHA"
       ]
 images:
-  - gcr.io/$PROJECT_ID/in-solidarity-bot:$TAG_NAME
+  - gcr.io/$PROJECT_ID/in-solidarity-bot:$COMMIT_SHA
