@@ -1,0 +1,31 @@
+steps:
+  - name: gcr.io/cloud-builders/gcloud
+    args:
+    - kms
+    - decrypt
+    - --ciphertext-file=key.pem.enc
+    - --plaintext-file=key.pem
+    - --location=global
+    - --keyring=in-solidarity-bot
+    - --key=github-app-key
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "gcr.io/$PROJECT_ID/in-solidarity-bot:$TAG_NAME", "."]
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/in-solidarity-bot:$TAG_NAME"]
+  - name: "gcr.io/cloud-builders/gcloud"
+    args:
+      [
+        "run",
+        "deploy",
+        "in-solidarity-bot",
+        "--image",
+        "gcr.io/$PROJECT_ID/in-solidarity-bot:$TAG_NAME",
+        "--region",
+        "us-central1",
+        "--platform",
+        "managed",
+        "--labels", 
+        "tag=$TAG_NAME"
+      ]
+images:
+  - gcr.io/jpoehnelt/in-solidarity-bot:$TAG_NAME
