@@ -28,4 +28,4 @@ steps:
         "tag=$TAG_NAME"
       ]
 images:
-  - gcr.io/jpoehnelt/in-solidarity-bot:$TAG_NAME
+  - gcr.io/$PROJECT_ID/in-solidarity-bot:$TAG_NAME
