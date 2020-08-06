@@ -33,7 +33,8 @@
     "nock": "^11.9.1",
     "smee-client": "^1.1.0",
     "ts-jest": "^24.1.0",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "lodash": ">=4.17.19"
   },
   "engines": {
     "node": ">=12.8.1"
