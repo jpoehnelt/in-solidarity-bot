@@ -23,6 +23,7 @@ import fs from "fs";
 
 const PATTERN = /((?:(?:white|black)[_-]*list)|slave|master)/gi;
 const SUMMARY = fs.readFileSync("./static/HELP.md", "utf8");
+const CHECK_NAME = "Inclusive Language Check";
 
 export enum Conclusion {
   SUCCESS = "success",
@@ -34,7 +35,6 @@ export enum Conclusion {
 }
 
 export class Solidarity {
-  private name = "Inclusive Language Check";
   private context: Context;
   private logger: LoggerWithTarget;
   private checkId?: number;
@@ -43,6 +43,7 @@ export class Solidarity {
     this.context = context;
     this.logger = logger;
   }
+
   get headSha(): string {
     return this.context.payload.pull_request.head.sha;
   }
@@ -54,19 +55,49 @@ export class Solidarity {
   get repo(): string {
     return this.context.payload.repository.name;
   }
+
+  get pullNumber(): number {
+    return this.context.payload.number;
+  }
+
   get checkOptions() {
     return {
       owner: this.owner,
       repo: this.repo,
       head_sha: this.headSha,
-      name: this.name,
+      name: CHECK_NAME,
     };
   }
 
   async run() {
+    let conclusion: Conclusion;
+    let output: Octokit.ChecksUpdateParamsOutput;
+
     await this.start();
     await this.update("in_progress");
-    const { conclusion, output } = await this.check();
+
+    try {
+      const check = await this.check();
+      conclusion = check.conclusion;
+      output = check.output;
+    } catch (e) {
+      this.logger.error({ err: e }, "Failed to complete check");
+
+      conclusion = Conclusion.CANCELLED;
+
+      if (e.status === 401 || e.status === 403) {
+        output = {
+          title: 'Cancelled',
+          summary: "Check is cancelled due to permissions.",
+        };
+      } else {
+        output = {
+          title: 'Error',
+          summary: "Check failed to complete.",
+        };
+      }
+    }
+
     await this.update("completed", conclusion, output);
   }
 
@@ -78,7 +109,7 @@ export class Solidarity {
       });
       this.checkId = response.data.id;
     } catch (e) {
-      this.logger.warn(e);
+      this.logger.error({ err: e }, "Failed to create check");
     }
   }
 
@@ -101,7 +132,7 @@ export class Solidarity {
         details_url,
       });
     } catch (e) {
-      this.logger.warn(e);
+      this.logger.error({ err: e }, "Failed to update check");
     }
   }
 
@@ -111,7 +142,7 @@ export class Solidarity {
   }> {
     let conclusion: Conclusion;
     const output: Octokit.ChecksUpdateParamsOutput = {
-      title: "Inclusive Language Check",
+      title: CHECK_NAME,
       summary: SUMMARY,
     };
 
@@ -119,7 +150,7 @@ export class Solidarity {
     const response = await this.context.github.pulls.get({
       owner,
       repo,
-      pull_number: this.context.payload.number,
+      pull_number: this.pullNumber,
       headers: { accept: "application/vnd.github.v3.diff" },
     });
 
@@ -141,7 +172,7 @@ export class Solidarity {
       conclusion,
       repo,
       owner,
-      pull_number: this.context.payload.number,
+      pull_number: this.pullNumber,
       sha: this.headSha,
     });
 

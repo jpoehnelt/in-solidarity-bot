@@ -26,12 +26,12 @@ module.exports = async (app: Application) => {
       "pull_request.synchronize",
     ],
     async (context: Context) => {
-      await run(context, app);
+      await run(context);
     }
   );
 
-  async function run(context: Context, app: Application) {
-    const solidarity = new Solidarity(context, app.log);
+  async function run(context: Context) {
+    const solidarity = new Solidarity(context, context.log);
     await solidarity.run();
   }
 };
