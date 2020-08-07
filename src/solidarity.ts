@@ -34,6 +34,13 @@ export enum Conclusion {
   ACTION_REQUIRED = "action_required",
 }
 
+export enum OutputTitle {
+  SUCCESS = "Check was successful",
+  ERROR = "Check failed due to error",
+  PERMISSION_NEEDED = "Check lacks permissions for private repository",
+  SUGGEST_ACTION = "Action Suggested",
+}
+
 export class Solidarity {
   private context: Context;
   private logger: LoggerWithTarget;
@@ -81,16 +88,20 @@ export class Solidarity {
       conclusion = check.conclusion;
       output = check.output;
     } catch (e) {
-      this.logger.error({ err: e }, "Failed to complete check");
+      this.logger.error(
+        { labels: { ...this.checkOptions }, err: e },
+        "Failed to complete check"
+      );
 
-      if (e.status === 401 || e.status === 403) {
+      if (e.status === 403) {
         output = {
-          title: 'Cancelled',
-          summary: "Check only runs on public repositories at this time.",
+          title: OutputTitle.PERMISSION_NEEDED,
+          summary:
+            "Check only runs on public repositories to limit required permissions.",
         };
       } else {
         output = {
-          title: 'Error',
+          title: OutputTitle.ERROR,
           summary: "Check failed to complete.",
         };
       }
@@ -160,9 +171,9 @@ export class Solidarity {
 
     if (output.annotations.length) {
       conclusion = Conclusion.NEUTRAL;
-      output.title = "Action Suggested";
+      output.title = OutputTitle.SUGGEST_ACTION;
     } else {
-      output.title = "Success";
+      output.title = OutputTitle.SUCCESS;
       conclusion = Conclusion.SUCCESS;
     }
 
