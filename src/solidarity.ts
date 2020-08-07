@@ -67,7 +67,7 @@ export class Solidarity {
     return this.context.payload.number;
   }
 
-  get checkOptions() {
+  get checkOptions(): Octokit.ChecksCreateParams {
     return {
       owner: this.owner,
       repo: this.repo,
@@ -76,7 +76,7 @@ export class Solidarity {
     };
   }
 
-  async run() {
+  async run(): Promise<void> {
     let conclusion: Conclusion = Conclusion.NEUTRAL;
     let output: Octokit.ChecksUpdateParamsOutput;
 
@@ -110,7 +110,7 @@ export class Solidarity {
     await this.update("completed", conclusion, output);
   }
 
-  async start() {
+  async start(): Promise<void> {
     try {
       const response = await this.context.github.checks.create({
         ...this.checkOptions,
@@ -127,7 +127,7 @@ export class Solidarity {
     conclusion?: Conclusion,
     output?: Octokit.ChecksUpdateParamsOutput,
     details_url?: string
-  ) {
+  ): Promise<void> {
     try {
       await this.context.github.checks.update({
         ...this.checkOptions,
@@ -195,7 +195,7 @@ export class Solidarity {
       for (const h of f.hunks) {
         for (const change of h.changes) {
           if (change.isInsert || change.isNormal) {
-            // @ts-ignore
+            // @ts-ignore matchAll may not be available
             for (const match of change.content.matchAll(PATTERN)) {
               annotations.push({
                 annotation_level: "warning",
