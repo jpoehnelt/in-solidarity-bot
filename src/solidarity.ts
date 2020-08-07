@@ -88,22 +88,27 @@ export class Solidarity {
       conclusion = check.conclusion;
       output = check.output;
     } catch (e) {
-      this.logger.error(
-        { labels: { ...this.checkOptions }, err: e },
-        "Failed to complete check"
-      );
-
       if (e.status === 403) {
         output = {
           title: OutputTitle.PERMISSION_NEEDED,
           summary:
             "Check only runs on public repositories to limit required permissions. See https://github.com/jpoehnelt/in-solidarity-bot/issues/16.",
         };
+
+        this.logger.info(
+          { labels: { ...this.checkOptions }, err: e },
+          "Failed to check private repository"
+        );
       } else {
         output = {
           title: OutputTitle.ERROR,
           summary: "Check failed to complete.",
         };
+
+        this.logger.error(
+          { labels: { ...this.checkOptions }, err: e },
+          "Failed to complete check"
+        );
       }
     }
 
