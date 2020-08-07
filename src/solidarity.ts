@@ -70,7 +70,7 @@ export class Solidarity {
   }
 
   async run() {
-    let conclusion: Conclusion;
+    let conclusion: Conclusion = Conclusion.NEUTRAL;
     let output: Octokit.ChecksUpdateParamsOutput;
 
     await this.start();
@@ -83,12 +83,10 @@ export class Solidarity {
     } catch (e) {
       this.logger.error({ err: e }, "Failed to complete check");
 
-      conclusion = Conclusion.CANCELLED;
-
       if (e.status === 401 || e.status === 403) {
         output = {
           title: 'Cancelled',
-          summary: "Check is cancelled due to permissions.",
+          summary: "Check only runs on public repositories at this time.",
         };
       } else {
         output = {
