@@ -86,7 +86,7 @@ export class Solidarity {
       if (e.status === 401 || e.status === 403) {
         output = {
           title: 'Cancelled',
-          summary: "Check only runs on public repositories at this time.",
+          summary: "Check only runs on public repositories to limit required permissions.",
         };
       } else {
         output = {
