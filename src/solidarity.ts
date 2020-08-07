@@ -83,7 +83,7 @@ export class Solidarity {
     } catch (e) {
       this.logger.error({ err: e }, "Failed to complete check");
 
-      if (e.status === 401 || e.status === 403) {
+      if (e.status === 403) {
         output = {
           title: 'Cancelled',
           summary: "Check only runs on public repositories to limit required permissions.",
