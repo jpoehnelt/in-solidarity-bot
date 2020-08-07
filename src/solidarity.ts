@@ -97,7 +97,7 @@ export class Solidarity {
         output = {
           title: OutputTitle.PERMISSION_NEEDED,
           summary:
-            "Check only runs on public repositories to limit required permissions.",
+            "Check only runs on public repositories to limit required permissions. See https://github.com/jpoehnelt/in-solidarity-bot/issues/16.",
         };
       } else {
         output = {
