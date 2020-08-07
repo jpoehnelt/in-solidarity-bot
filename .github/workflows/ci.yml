@@ -24,3 +24,5 @@ jobs:
         npm i
         npm test
     - uses: codecov/codecov-action@v1
+    - run: docker build . --file Dockerfile
+    

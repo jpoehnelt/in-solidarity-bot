@@ -12,10 +12,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM node
+FROM golang AS GO_TOOLS
 
-COPY . .
+RUN go get github.com/tj/node-prune
 
-RUN npm i && npm run build
+FROM node AS BUILD_IMAGE
+
+WORKDIR /usr/src/app
+
+COPY package.json package-lock.json ./
+
+RUN npm i
+
+COPY src src
+COPY package.json tsconfig.json ./
+
+RUN npm run build && npm prune --production
+
+COPY --from=GO_TOOLS /go/bin/node-prune /usr/local/bin/node-prune
+
+RUN node-prune
+
+FROM node:alpine
+
+WORKDIR /usr/src/app
+
+# copy from build image
+COPY --from=BUILD_IMAGE /usr/src/app/dist ./dist
+COPY --from=BUILD_IMAGE /usr/src/app/node_modules ./node_modules
+
+COPY static ./static
+COPY key.pem package.json ./
 
 ENTRYPOINT [ "npm", "start" ]
