@@ -8,3 +8,4 @@ plugins:
   - "@semantic-release/npm"
 options:
   debug: true
+  npm_token: "notoken"
