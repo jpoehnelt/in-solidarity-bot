@@ -3,20 +3,25 @@
   "version": "1.0.0",
   "private": true,
   "description": "A Probot app",
-  "author": "Justin Poehnelt <justin.poehnelt@gmail.com>",
-  "license": "Apache 2.0",
-  "repository": "https://github.com/jpoehnelt/in-solidarity-bot.git",
-  "homepage": "https://github.com/jpoehnelt/in-solidarity-bot",
-  "bugs": "https://github.com/jpoehnelt/in-solidarity-bot/issues",
   "keywords": [
     "probot",
     "github",
     "probot-app"
   ],
+  "homepage": "https://github.com/jpoehnelt/in-solidarity-bot",
+  "bugs": "https://github.com/jpoehnelt/in-solidarity-bot/issues",
+  "repository": "https://github.com/jpoehnelt/in-solidarity-bot.git",
+  "license": "Apache 2.0",
+  "author": "Justin Poehnelt <justin.poehnelt@gmail.com>",
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "format": "eslint src/*.ts --fix",
+    "lint": "eslint src/*.ts",
     "start": "probot run ./dist/index.js",
     "test": "jest --passWithNoTests"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "dependencies": {
     "gitdiff-parser": "^0.2.2",
@@ -27,18 +32,21 @@
     "@types/jest": "^24.0.19",
     "@types/nock": "^11.1.0",
     "@types/node": "^14.0.27",
+    "@typescript-eslint/eslint-plugin": "^3.8.0",
     "@typescript-eslint/parser": "^3.8.0",
+    "eslint": "^7.6.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-jest": "^22.21.0",
+    "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-typescript": "^0.14.0",
-    "jest": "^24.9.0",
+    "jest": "^26.2.2",
     "nock": "^11.9.1",
+    "prettier": "^2.0.5",
     "smee-client": "^1.1.0",
-    "ts-jest": "^24.1.0",
+    "ts-jest": "^26.1.4",
     "typescript": "^3.9.7"
   },
   "engines": {
     "node": ">=12.8.1"
-  },
-  "jest": {
-    "testEnvironment": "node"
   }
 }
