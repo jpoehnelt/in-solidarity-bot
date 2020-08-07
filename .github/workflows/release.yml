@@ -24,6 +24,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: npm i
       - run: npm test
+      - run: docker build . --file Dockerfile
       - name: Release
         uses: cycjimmy/semantic-release-action@v2
         with:
@@ -35,4 +36,3 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM: "notoken"
-
