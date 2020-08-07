@@ -24,8 +24,7 @@ COPY package.json package-lock.json ./
 
 RUN npm i
 
-COPY src src
-COPY package.json tsconfig.json ./
+COPY . .
 
 RUN npm run build && npm prune --production
 
@@ -38,10 +37,6 @@ FROM node:alpine
 WORKDIR /usr/src/app
 
 # copy from build image
-COPY --from=BUILD_IMAGE /usr/src/app/dist ./dist
-COPY --from=BUILD_IMAGE /usr/src/app/node_modules ./node_modules
-
-COPY static ./static
-COPY key.pem package.json ./
+COPY --from=BUILD_IMAGE /usr/src/app .
 
 ENTRYPOINT [ "npm", "start" ]
