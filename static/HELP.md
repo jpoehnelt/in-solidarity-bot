@@ -21,3 +21,7 @@
 Heather Brodie Graves & Roger Graves (1998) Masters, slaves, and infant mortality: Language challenges for technical editing, Technical Communication Quarterly, 7:4, 389-414, DOI: 10.1080/10572259809364639
 
 https://tools.ietf.org/html/draft-knodel-terminology-02
+
+### Contributing
+
+Update this [document](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/static/HELP.md) or open an [issue](https://github.com/jpoehnelt/in-solidarity-bot/issues).

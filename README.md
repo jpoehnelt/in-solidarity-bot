@@ -1,5 +1,6 @@
 # In Solidarity
 
+[![Install](https://img.shields.io/badge/-Install%20App-blue)](https://github.com/apps/in-solidarity)
 ![Build](https://github.com/jpoehnelt/in-solidarity-bot/workflows/Build/badge.svg)
 ![Release](https://github.com/jpoehnelt/in-solidarity-bot/workflows/Release/badge.svg)
 [![codecov](https://codecov.io/gh/jpoehnelt/in-solidarity-bot/branch/master/graph/badge.svg)](https://codecov.io/gh/jpoehnelt/in-solidarity-bot)
@@ -9,6 +10,10 @@
 > A GitHub Bot built with [Probot](https://github.com/probot/probot) that checks for inclusive language. See [help](./static/HELP.md) for more information.
 
 ![](./static/screenshot.png)
+
+## Install
+
+The app can be installed at https://github.com/apps/in-solidarity.
 
 ## Setup
 
