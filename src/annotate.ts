@@ -32,12 +32,12 @@ export const annotate = (
             annotations.push({
               annotation_level: "warning",
               end_column: match.index + match[0].length - 1,
-              end_line: change.lineNumber as number,
+              end_line: (change.lineNumber || change.newLineNumber) as number,
               message: `Please consider an alternative to \`${match[0]}\`.`,
               path: f.newPath,
               raw_details: change.content,
               start_column: match.index,
-              start_line: change.lineNumber as number,
+              start_line: (change.lineNumber || change.newLineNumber) as number,
               title: "Match Found",
             });
           }
