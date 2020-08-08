@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-module.exports = {
-  transform: {
-    "^.+\\.tsx?$": "ts-jest",
-  },
-  collectCoverage: true,
-};
+import { PATTERN } from "./solidarity";
+import { annotate } from "./annotate";
+import fs from "fs";
+import { parse } from "./parse";
+
+test("should annotation diff", () => {
+  const files = parse(fs.readFileSync("./fixtures/pull.normal.diff", "utf8"));
+  const annotations = annotate(PATTERN, files);
+  expect(annotations).toEqual([]);
+});

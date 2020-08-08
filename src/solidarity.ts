@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import gitDiffParser, { File } from "gitdiff-parser";
-
 import { Context } from "probot";
 import { LoggerWithTarget } from "probot/lib/wrap-logger";
 import { Octokit } from "@octokit/rest/";
+import { annotate } from "./annotate";
 import fs from "fs";
+import { parse } from "./parse";
 
-const PATTERN = /((?:(?:white|black)[_-]*list)|slave|master)/gi;
+export const PATTERN = /((?:(?:white|black)[_-]*list)|slave|master)/gi;
 const SUMMARY = fs.readFileSync("./static/HELP.md", "utf8");
 const CHECK_NAME = "Inclusive Language Check";
 
@@ -170,9 +170,9 @@ export class Solidarity {
 
     const diff = (response.data as unknown) as string;
 
-    const parsedDiff = gitDiffParser.parse(diff);
+    const parsedDiff = parse(diff);
 
-    output.annotations = this.annotate(parsedDiff);
+    output.annotations = annotate(PATTERN, parsedDiff);
 
     if (output.annotations.length) {
       conclusion = Conclusion.NEUTRAL;
@@ -191,33 +191,5 @@ export class Solidarity {
     });
 
     return { conclusion, output };
-  }
-
-  annotate(files: File[]): Octokit.ChecksUpdateParamsOutputAnnotations[] {
-    const annotations: Octokit.ChecksUpdateParamsOutputAnnotations[] = [];
-
-    for (const f of files) {
-      for (const h of f.hunks) {
-        for (const change of h.changes) {
-          if (change.isInsert || change.isNormal) {
-            // @ts-ignore matchAll may not be available
-            for (const match of change.content.matchAll(PATTERN)) {
-              annotations.push({
-                annotation_level: "warning",
-                end_column: match.index + match[0].length - 1,
-                end_line: change.lineNumber as number,
-                message: `Please consider an alternative to \`${match[0]}\`.`,
-                path: f.newPath,
-                raw_details: change.content,
-                start_column: match.index,
-                start_line: change.lineNumber as number,
-                title: "Match Found",
-              });
-            }
-          }
-        }
-      }
-    }
-    return annotations;
   }
 }

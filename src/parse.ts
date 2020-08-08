@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-module.exports = {
-  transform: {
-    "^.+\\.tsx?$": "ts-jest",
-  },
-  collectCoverage: true,
+import gitDiffParser, { File } from "gitdiff-parser";
+
+export const parse = (diff: string): File[] => {
+  return gitDiffParser.parse(diff);
 };
