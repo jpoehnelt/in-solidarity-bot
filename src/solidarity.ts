@@ -23,7 +23,7 @@ import { parse } from "./parse";
 
 export const PATTERN = /((?:(?:white|black)[_-]*list)|slave|master)/gi;
 const SUMMARY = fs.readFileSync("./static/HELP.md", "utf8");
-const CHECK_NAME = "Inclusive Language Check";
+const CHECK_NAME = "Inclusive Language";
 
 export enum Conclusion {
   SUCCESS = "success",
