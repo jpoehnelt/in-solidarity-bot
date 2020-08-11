@@ -21,7 +21,7 @@ import { annotate } from "./annotate";
 import fs from "fs";
 import { parse } from "./parse";
 
-export const PATTERN = /((?:(?:white|black)[_-]*list)|slave|master)/gi;
+export const PATTERN = /((?:(?:white|black)[_-]*list)|slave|master|native|blindly)/gi;
 const SUMMARY = fs.readFileSync("./static/HELP.md", "utf8");
 const CHECK_NAME = "Inclusive Language";
 
