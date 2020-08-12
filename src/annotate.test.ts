@@ -14,13 +14,56 @@
  * limitations under the License.
  */
 
-import { PATTERN } from "./solidarity";
-import { annotate } from "./annotate";
+import { DEFAULT_RULES, Level } from "./rules";
+import { annotate, getLevelFromAnnotations } from "./annotate";
+
+import { Octokit } from "@octokit/rest/";
 import fs from "fs";
 import { parse } from "./parse";
 
-test("should annotation diff", () => {
+test("should ignore existing lines", () => {
   const files = parse(fs.readFileSync("./fixtures/pull.normal.diff", "utf8"));
-  const annotations = annotate(PATTERN, files);
+  const annotations = annotate({ rules: DEFAULT_RULES }, files);
   expect(annotations).toEqual([]);
+});
+
+test("should annotate correctly", () => {
+  const files = parse(fs.readFileSync("./fixtures/pull.failing.diff", "utf8"));
+  const annotations = annotate({ rules: DEFAULT_RULES }, files);
+  expect(annotations).toEqual([
+    {
+      annotation_level: "warning",
+      end_column: 8,
+      end_line: 2,
+      message: "Please consider an alternative to `whitelist`.",
+      path: "README.md",
+      raw_details: "/white[_-]*list/gi",
+      start_column: 0,
+      start_line: 2,
+      title: "Match Found",
+    },
+    {
+      annotation_level: "warning",
+      end_column: 5,
+      end_line: 3,
+      message: "Please consider an alternative to `Master`.",
+      path: "README.md",
+      raw_details: "/master/gi",
+      start_column: 0,
+      start_line: 3,
+      title: "Match Found",
+    },
+  ]);
+});
+
+test("should get correct level from annotations", () => {
+  expect(getLevelFromAnnotations([])).toBe(Level.OFF);
+  expect(
+    getLevelFromAnnotations([
+      { annotation_level: "off" },
+      { annotation_level: "notice" },
+      { annotation_level: "warning" },
+      { annotation_level: "failure" },
+    ] as Octokit.ChecksUpdateParamsOutputAnnotations[])
+  ).toBe(Level.FAILURE);
 });

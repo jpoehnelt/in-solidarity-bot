@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
+import { Configuration, InvalidConfigError, getConfig } from "./config";
+import { annotate, getLevelFromAnnotations } from "./annotate";
+
 import { Context } from "probot";
+import { File } from "gitdiff-parser";
+import { Level } from "./rules";
 import { LoggerWithTarget } from "probot/lib/wrap-logger";
 import { Octokit } from "@octokit/rest/";
-import { annotate } from "./annotate";
 import fs from "fs";
 import { parse } from "./parse";
 
-export const PATTERN = /((?:(?:white|black)[_-]*list)|slave|master|native|blindly)/gi;
 const SUMMARY = fs.readFileSync("./static/HELP.md", "utf8");
 const CHECK_NAME = "Inclusive Language";
 
@@ -35,16 +38,19 @@ export enum Conclusion {
 }
 
 export enum OutputTitle {
-  SUCCESS = "Check was successful",
+  SUCCESS = "Check completed with success",
   ERROR = "Check failed due to error",
   PERMISSION_NEEDED = "Check lacks permissions for private repository",
-  SUGGEST_ACTION = "Action Suggested",
+  FAILURE = "Check completed with failures",
+  NOTICE = "Check completed with notices",
+  WARNING = "Check completed with warnings",
 }
 
 export class Solidarity {
   private context: Context;
   private logger: LoggerWithTarget;
   private checkId?: number;
+  config?: Configuration;
 
   constructor(context: Context, logger: LoggerWithTarget) {
     this.context = context;
@@ -82,6 +88,26 @@ export class Solidarity {
 
     await this.start();
     await this.update("in_progress");
+
+    try {
+      this.config = await getConfig(this.context);
+    } catch (e) {
+      if (e instanceof InvalidConfigError) {
+        conclusion = Conclusion.FAILURE;
+        output = {
+          title: OutputTitle.ERROR,
+          summary: "Configuration is invalid.",
+        };
+      } else {
+        conclusion = Conclusion.CANCELLED;
+        output = {
+          title: OutputTitle.ERROR,
+          summary: "Could not load configuration.",
+        };
+      }
+      await this.update("completed", conclusion, output);
+      return;
+    }
 
     try {
       const check = await this.check();
@@ -150,6 +176,19 @@ export class Solidarity {
     }
   }
 
+  async diff(): Promise<File[]> {
+    const response = await this.context.github.pulls.get({
+      owner: this.owner,
+      repo: this.repo,
+      pull_number: this.pullNumber,
+      headers: { accept: "application/vnd.github.v3.diff" },
+    });
+
+    const diff = (response.data as unknown) as string;
+
+    return parse(diff);
+  }
+
   async check(): Promise<{
     conclusion: Conclusion;
     output: Octokit.ChecksUpdateParamsOutput;
@@ -159,33 +198,35 @@ export class Solidarity {
       title: CHECK_NAME,
       summary: SUMMARY,
     };
+    const diff = await this.diff();
 
-    const { owner, repo } = this.checkOptions;
-    const response = await this.context.github.pulls.get({
-      owner,
-      repo,
-      pull_number: this.pullNumber,
-      headers: { accept: "application/vnd.github.v3.diff" },
-    });
+    output.annotations = annotate(this.config as Configuration, diff);
 
-    const diff = (response.data as unknown) as string;
+    const level = getLevelFromAnnotations(output.annotations);
 
-    const parsedDiff = parse(diff);
-
-    output.annotations = annotate(PATTERN, parsedDiff);
-
-    if (output.annotations.length) {
-      conclusion = Conclusion.NEUTRAL;
-      output.title = OutputTitle.SUGGEST_ACTION;
-    } else {
-      output.title = OutputTitle.SUCCESS;
-      conclusion = Conclusion.SUCCESS;
+    switch (level) {
+      case Level.FAILURE:
+        conclusion = Conclusion.ACTION_REQUIRED;
+        output.title = OutputTitle.FAILURE;
+        break;
+      case Level.WARNING:
+        conclusion = Conclusion.NEUTRAL;
+        output.title = OutputTitle.WARNING;
+        break;
+      case Level.NOTICE:
+        conclusion = Conclusion.NEUTRAL;
+        output.title = OutputTitle.NOTICE;
+        break;
+      case Level.OFF:
+      default:
+        conclusion = Conclusion.SUCCESS;
+        output.title = OutputTitle.SUCCESS;
     }
 
     this.logger.info({
       conclusion,
-      repo,
-      owner,
+      repo: this.repo,
+      owner: this.owner,
       pull_number: this.pullNumber,
       sha: this.headSha,
     });
