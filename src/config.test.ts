@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { InvalidConfigError, getConfig } from "./config";
+import { DEFAULT_CONFIGURATION, InvalidConfigError, getConfig } from "./config";
 
 import { Context } from "probot";
 import fs from "fs";
@@ -45,7 +45,14 @@ test("should throw for invalid config", async () => {
       };
     },
   } as unknown) as Context;
-  await expect(() => getConfig(context)).rejects.toBeInstanceOf(
-    InvalidConfigError
-  );
+  await expect(getConfig(context)).rejects.toBeInstanceOf(InvalidConfigError);
+});
+
+test("should handle case wehre no repo config", async () => {
+  const context = ({
+    config: () => {
+      return;
+    },
+  } as unknown) as Context;
+  await expect(getConfig(context)).resolves.toBe(DEFAULT_CONFIGURATION);
 });
