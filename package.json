@@ -43,7 +43,7 @@
     "nock": "^11.9.1",
     "prettier": "^2.0.5",
     "smee-client": "^1.1.0",
-    "ts-jest": "^26.1.4",
+    "ts-jest": "^26.2.0",
     "typescript": "^3.9.7"
   },
   "engines": {
