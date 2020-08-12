@@ -34,7 +34,21 @@ Share this app with one of the following badges.
 
 [![](https://github.com/jpoehnelt/in-solidarity-bot/raw/main/static//badge-for-the-badge.png)](https://github.com/apps/in-solidarity)
 
-## Setup
+### Configuration
+
+The level of rules can be modified using `.github/in-solidarity.yml`. Chec the[sample configuration](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/fixtures/in-solidarity.yml).
+
+```yaml
+rules:
+  master:
+    level: off
+  slave:
+    level: failure
+```
+
+The rule names are in [rules.ts](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/src/rules.ts).
+
+## Development
 
 ```sh
 # Install dependencies

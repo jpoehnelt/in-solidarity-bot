@@ -19,4 +19,5 @@ module.exports = {
     "^.+\\.tsx?$": "ts-jest",
   },
   collectCoverage: true,
+  testPathIgnorePatterns: ["/dist/"],
 };
