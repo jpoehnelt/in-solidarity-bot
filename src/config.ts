@@ -34,18 +34,15 @@ const CONFIG_FILE = "in-solidarity.yml";
 
 const ajv = new Ajv({ allErrors: true });
 
-const rulesPropertiesSchema = Object.keys(DEFAULT_RULES).reduce(
-  (obj, k) => {
-    obj[k] = {
-      additionalProperties: false,
-      properties: {
-        level: { type: "string", enum: Object.values(Level) },
-      },
-    };
-    return obj;
-  },
-  {}
-);
+const rulesPropertiesSchema = Object.keys(DEFAULT_RULES).reduce((obj, k) => {
+  obj[k] = {
+    additionalProperties: false,
+    properties: {
+      level: { type: "string", enum: Object.values(Level) },
+    },
+  };
+  return obj;
+}, {});
 
 const schema = {
   additionalProperties: false,
