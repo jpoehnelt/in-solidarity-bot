@@ -26,7 +26,7 @@ export interface Configuration {
 }
 export class InvalidConfigError extends Error {}
 
-const DEFAULT_CONFIGURATION: Configuration = {
+export const DEFAULT_CONFIGURATION: Configuration = {
   rules: DEFAULT_RULES,
 };
 
@@ -57,17 +57,18 @@ const schema = {
 export const getConfig = async (context: Context): Promise<Configuration> => {
   const validate = ajv.compile(schema);
 
-  const repoConfig = (await context.config(CONFIG_FILE)) as Configuration;
+  const repoConfig = await context.config(CONFIG_FILE);
 
-  if (!validate(repoConfig)) {
-    throw new InvalidConfigError(
-      "configuration is invalid: " + JSON.stringify(validate.errors)
-    );
+  if (repoConfig) {
+    if (!validate(repoConfig)) {
+      throw new InvalidConfigError(
+        "configuration is invalid: " + JSON.stringify(validate.errors)
+      );
+    }
+
+    return deepmerge(DEFAULT_CONFIGURATION, repoConfig as Configuration, {
+      arrayMerge: (_, b) => b,
+    });
   }
-
-  const config = deepmerge(DEFAULT_CONFIGURATION, repoConfig, {
-    arrayMerge: (_, b) => b,
-  });
-
-  return config;
+  return DEFAULT_CONFIGURATION;
 };
