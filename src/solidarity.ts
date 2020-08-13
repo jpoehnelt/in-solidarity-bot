@@ -105,6 +105,12 @@ export class Solidarity {
           summary: "Could not load configuration.",
         };
       }
+      
+      this.logger.error(
+        { labels: { ...this.checkOptions }, err: e },
+        output.summary
+      );
+
       await this.update("completed", conclusion, output);
       return;
     }
