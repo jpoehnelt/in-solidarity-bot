@@ -36,6 +36,7 @@ const ajv = new Ajv({ allErrors: true });
 
 const rulesPropertiesSchema = Object.keys(DEFAULT_RULES).reduce((obj, k) => {
   obj[k] = {
+    type: "object",
     additionalProperties: false,
     properties: {
       level: { type: "string", enum: Object.values(Level) },
@@ -45,9 +46,11 @@ const rulesPropertiesSchema = Object.keys(DEFAULT_RULES).reduce((obj, k) => {
 }, {});
 
 const schema = {
+  type: "object",
   additionalProperties: false,
   properties: {
     rules: {
+      type: "object",
       additionalProperties: false,
       properties: rulesPropertiesSchema,
     },
@@ -58,7 +61,6 @@ export const getConfig = async (context: Context): Promise<Configuration> => {
   const validate = ajv.compile(schema);
 
   const repoConfig = await context.config(CONFIG_FILE);
-
   if (repoConfig) {
     if (!validate(repoConfig)) {
       throw new InvalidConfigError(

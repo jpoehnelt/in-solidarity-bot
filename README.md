@@ -36,7 +36,7 @@ Share this app with one of the following badges.
 
 ### Configuration
 
-The level of rules can be modified using `.github/in-solidarity.yml`. Chec the[sample configuration](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/fixtures/in-solidarity.yml).
+The level of rules can be modified using `.github/in-solidarity.yml`. Check the [sample configuration](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/fixtures/in-solidarity.yml).
 
 ```yaml
 rules:
