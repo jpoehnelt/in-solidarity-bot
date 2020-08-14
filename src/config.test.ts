@@ -21,7 +21,7 @@ import fs from "fs";
 import yaml from "js-yaml";
 
 const fakeContext = ({
-  config: () =>
+  config: async () =>
     yaml.safeLoad(fs.readFileSync("./fixtures/in-solidarity.yml", "utf8")),
 } as unknown) as Context;
 
@@ -35,7 +35,7 @@ test("should override default rules", async () => {
 
 test("should throw for invalid config", async () => {
   const context = ({
-    config: () => {
+    config: async () => {
       return {
         rules: {
           master: {
@@ -48,9 +48,22 @@ test("should throw for invalid config", async () => {
   await expect(getConfig(context)).rejects.toBeInstanceOf(InvalidConfigError);
 });
 
-test("should handle case wehre no repo config", async () => {
+test("should throw for invalid config having level at top", async () => {
   const context = ({
-    config: () => {
+    config: async () => {
+      return {
+        rules: {
+          master: "failure",
+        },
+      };
+    },
+  } as unknown) as Context;
+  await expect(getConfig(context)).rejects.toBeInstanceOf(InvalidConfigError);
+});
+
+test("should handle case where no repo config", async () => {
+  const context = ({
+    config: async () => {
       return;
     },
   } as unknown) as Context;
