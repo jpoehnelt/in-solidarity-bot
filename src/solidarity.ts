@@ -91,6 +91,7 @@ export class Solidarity {
 
     try {
       this.config = await getConfig(this.context);
+      this.logger.info(this.config);
     } catch (e) {
       if (e instanceof InvalidConfigError) {
         conclusion = Conclusion.FAILURE;
