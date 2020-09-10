@@ -14,14 +14,12 @@
 
 steps:
   - name: gcr.io/cloud-builders/gcloud
+    entrypoint: bash
     args:
-    - kms
-    - decrypt
-    - --ciphertext-file=key.pem.enc
-    - --plaintext-file=key.pem
-    - --location=global
-    - --keyring=in-solidarity-bot
-    - --key=github-app-key
+    - '-e'
+    - '-c'
+    - |-
+      gcloud secrets versions access 1 --secret key-pem > key.pem
   - name: "gcr.io/cloud-builders/docker"
     args: ["build", "-t", "gcr.io/$PROJECT_ID/in-solidarity-bot:$COMMIT_SHA", "."]
   - name: "gcr.io/cloud-builders/docker"
