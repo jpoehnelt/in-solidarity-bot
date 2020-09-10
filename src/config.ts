@@ -23,11 +23,13 @@ import deepmerge from "deepmerge";
 
 export interface Configuration {
   rules: { [key: string]: Rule };
+  ignore: string[];
 }
 export class InvalidConfigError extends Error {}
 
 export const DEFAULT_CONFIGURATION: Configuration = {
   rules: DEFAULT_RULES,
+  ignore: [".github/in-solidarity.yml"],
 };
 
 const CONFIG_FILE = "in-solidarity.yml";
@@ -53,6 +55,10 @@ const schema = {
       type: "object",
       additionalProperties: false,
       properties: rulesPropertiesSchema,
+    },
+    ignore: {
+      type: "array",
+      items: { type: "string" },
     },
   },
 };

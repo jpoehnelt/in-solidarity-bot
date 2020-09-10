@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-import { DEFAULT_RULES, Level } from "./rules";
 import { annotate, getLevelFromAnnotations } from "./annotate";
 
+import { DEFAULT_CONFIGURATION } from "./config";
+import { Level } from "./rules";
 import { Octokit } from "@octokit/rest/";
 import fs from "fs";
 import { parse } from "./parse";
 
 test("should ignore existing lines", () => {
   const files = parse(fs.readFileSync("./fixtures/pull.normal.diff", "utf8"));
-  const annotations = annotate({ rules: DEFAULT_RULES }, files);
+  const annotations = annotate(DEFAULT_CONFIGURATION, files);
   expect(annotations).toEqual([]);
 });
 
 test("should annotate correctly", () => {
   const files = parse(fs.readFileSync("./fixtures/pull.failing.diff", "utf8"));
-  const annotations = annotate({ rules: DEFAULT_RULES }, files);
+  const annotations = annotate(DEFAULT_CONFIGURATION, files);
   expect(annotations).toEqual([
     {
       annotation_level: "warning",
