@@ -17,7 +17,7 @@
 import { Conclusion, OutputTitle, Solidarity } from "./solidarity";
 
 import { Context } from "probot";
-import { DEFAULT_RULES } from "./rules";
+import { DEFAULT_CONFIGURATION } from "./config";
 import { LoggerWithTarget } from "probot/lib/wrap-logger";
 import fs from "fs";
 import { parse } from "./parse";
@@ -34,7 +34,7 @@ test("solidarity should run check on failing diff", async () => {
   );
 
   s.diff = jest.fn().mockReturnValue(failingDIff);
-  s.config = { rules: DEFAULT_RULES };
+  s.config = DEFAULT_CONFIGURATION;
 
   const { conclusion, output } = await s.check();
   expect(conclusion).toBe(Conclusion.NEUTRAL);

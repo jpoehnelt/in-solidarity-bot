@@ -18,6 +18,7 @@ import { Configuration } from "./config";
 import { File } from "gitdiff-parser";
 import { Level } from "./rules";
 import { Octokit } from "@octokit/rest/";
+import minimatch from "minimatch";
 
 export const annotate = (
   config: Configuration,
@@ -26,6 +27,10 @@ export const annotate = (
   const annotations: Octokit.ChecksUpdateParamsOutputAnnotations[] = [];
 
   for (const f of files) {
+    if (config.ignore.some((pattern) => minimatch(f.newPath, pattern))) {
+      continue;
+    }
+
     for (const h of f.hunks) {
       for (const change of h.changes) {
         if (change.isInsert) {

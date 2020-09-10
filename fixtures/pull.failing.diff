@@ -6,3 +6,11 @@ index 83c831f..32091b9 100644
  # test
 +whitelist
 +Master
+diff --git a/.github/in-solidarity.yml b/.github/in-solidarity.yml
+index 83c831f..32091b9 100644
+--- a/.github/in-solidarity.yml
++++ b/.github/in-solidarity.yml
+@@ -1 +1,3 @@
+ # test
++whitelist
++Master

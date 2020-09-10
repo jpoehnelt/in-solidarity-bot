@@ -44,6 +44,9 @@ rules:
     level: off
   slave:
     level: failure
+ignore:
+ - ".github/in-solidarity.yml"  # default
+ - "**/*.yml"
 ```
 
 The rule names are in [rules.ts](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/src/rules.ts).
