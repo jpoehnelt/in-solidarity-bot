@@ -142,7 +142,7 @@ export class Solidarity {
           {
             labels: {
               ...this.checkOptions,
-              ...this.config,
+              config: this.config,
               payload: this.context.payload,
             },
             err: e,
