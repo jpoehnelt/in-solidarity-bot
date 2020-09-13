@@ -11,3 +11,10 @@ index c5284c3..abb3a30 100644
  
  export enum Conclusion {
    SUCCESS = "success",
+diff --git a/test.txt b/test.txt
+deleted file mode 100644
+index c5284c3..abb3a30 100644
+--- a/test.txt
++++ /dev/null
+@@ -1 +0,0 @@
+-master

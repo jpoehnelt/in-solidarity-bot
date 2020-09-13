@@ -27,7 +27,10 @@ export const annotate = (
   const annotations: Octokit.ChecksUpdateParamsOutputAnnotations[] = [];
 
   for (const f of files) {
-    if (config.ignore.some((pattern) => minimatch(f.newPath, pattern))) {
+    if (
+      f.type === "delete" ||
+      config.ignore.some((pattern) => minimatch(f.newPath, pattern))
+    ) {
       continue;
     }
 
