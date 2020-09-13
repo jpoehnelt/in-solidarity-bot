@@ -139,7 +139,14 @@ export class Solidarity {
         };
 
         this.logger.error(
-          { labels: { ...this.checkOptions }, err: e },
+          {
+            labels: {
+              ...this.checkOptions,
+              ...this.config,
+              payload: this.context.payload,
+            },
+            err: e,
+          },
           "Failed to complete check"
         );
       }
