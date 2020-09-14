@@ -15,7 +15,7 @@
     "noImplicitAny": false,
     "esModuleInterop": true,
     "declaration": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
   },
   "include": [
     "src/**/*"

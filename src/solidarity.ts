@@ -14,16 +14,27 @@
  * limitations under the License.
  */
 
+import {
+  ChecksUpdateParamsOutputAnnotations,
+  annotate,
+  getLevelFromAnnotations,
+} from "./annotate";
 import { Configuration, InvalidConfigError, getConfig } from "./config";
-import { annotate, getLevelFromAnnotations } from "./annotate";
+import { Context, Logger } from "probot";
 
-import { Context } from "probot";
 import { File } from "gitdiff-parser";
 import { Level } from "./rules";
-import { LoggerWithTarget } from "probot/lib/wrap-logger";
-import { Octokit } from "@octokit/rest/";
+import { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 import fs from "fs";
 import { parse } from "./parse";
+
+type ChecksCreateParams = RestEndpointMethodTypes["checks"]["create"]["parameters"];
+
+export type ChecksUpdateParamsOutput = {
+  title: string;
+  summary: string;
+  annotations?: ChecksUpdateParamsOutputAnnotations[];
+};
 
 const SUMMARY = fs.readFileSync("./static/HELP.md", "utf8");
 const CHECK_NAME = "Inclusive Language";
@@ -48,11 +59,11 @@ export enum OutputTitle {
 
 export class Solidarity {
   private context: Context;
-  private logger: LoggerWithTarget;
+  private logger: Logger;
   private checkId?: number;
   config?: Configuration;
 
-  constructor(context: Context, logger: LoggerWithTarget) {
+  constructor(context: Context, logger: Logger) {
     this.context = context;
     this.logger = logger;
   }
@@ -73,7 +84,7 @@ export class Solidarity {
     return this.context.payload.number;
   }
 
-  get checkOptions(): Octokit.ChecksCreateParams {
+  get checkOptions(): ChecksCreateParams {
     return {
       owner: this.owner,
       repo: this.repo,
@@ -84,14 +95,14 @@ export class Solidarity {
 
   async run(): Promise<void> {
     let conclusion: Conclusion = Conclusion.NEUTRAL;
-    let output: Octokit.ChecksUpdateParamsOutput;
+    let output: { title: string; summary: string };
 
     await this.start();
     await this.update("in_progress");
 
     try {
       this.config = await getConfig(this.context);
-      this.logger.info(this.config);
+      this.logger.info(this.config, "Loaded config");
     } catch (e) {
       if (e instanceof InvalidConfigError) {
         conclusion = Conclusion.FAILURE;
@@ -170,7 +181,7 @@ export class Solidarity {
   async update(
     status: "queued" | "in_progress" | "completed",
     conclusion?: Conclusion,
-    output?: Octokit.ChecksUpdateParamsOutput,
+    output?: ChecksUpdateParamsOutput,
     details_url?: string
   ): Promise<void> {
     try {
@@ -205,10 +216,10 @@ export class Solidarity {
 
   async check(): Promise<{
     conclusion: Conclusion;
-    output: Octokit.ChecksUpdateParamsOutput;
+    output: ChecksUpdateParamsOutput;
   }> {
     let conclusion: Conclusion;
-    const output: Octokit.ChecksUpdateParamsOutput = {
+    const output: ChecksUpdateParamsOutput = {
       title: CHECK_NAME,
       summary: SUMMARY,
     };
