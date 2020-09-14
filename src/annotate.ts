@@ -30,6 +30,7 @@ export const annotate = (
     if (
       f.type === "delete" ||
       f.isBinary ||
+      f.newPath === undefined ||
       config.ignore.some((pattern) => minimatch(f.newPath, pattern))
     ) {
       continue;
