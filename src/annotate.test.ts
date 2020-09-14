@@ -57,6 +57,24 @@ test("should annotate correctly", () => {
   ]);
 });
 
+test("should annotate case without newPath", () => {
+  // sourced from https://patch-diff.githubusercontent.com/raw/bwvalle/learnopencv/pull/7.diff
+  const files = [
+    {
+      hunks: [],
+      newEndingNewLine: true,
+      newMode: "100644",
+      newRevision: "00c87967",
+      oldEndingNewLine: true,
+      oldRevision: "00000000",
+      type: "modify",
+    },
+  ];
+
+  const annotations = annotate(DEFAULT_CONFIGURATION, files as any);
+  expect(annotations).toEqual([]);
+});
+
 test("should get correct level from annotations", () => {
   expect(getLevelFromAnnotations([])).toBe(Level.OFF);
   expect(

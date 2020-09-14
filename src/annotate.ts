@@ -29,6 +29,7 @@ export const annotate = (
   for (const f of files) {
     if (
       f.type === "delete" ||
+      f.isBinary ||
       config.ignore.some((pattern) => minimatch(f.newPath, pattern))
     ) {
       continue;
