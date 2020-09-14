@@ -129,7 +129,7 @@ export class Solidarity {
         };
 
         this.logger.info(
-          { labels: { ...this.checkOptions }, err: e },
+          { labels: { ...this.checkOptions } },
           "Failed to check private repository"
         );
       } else {
