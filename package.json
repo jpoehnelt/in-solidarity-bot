@@ -30,7 +30,7 @@
     "gitdiff-parser": "^0.2.2",
     "js-yaml": "^3.14.0",
     "minimatch": "^3.0.4",
-    "probot": "^9.13.0"
+    "probot": "^10.2.0"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^9.0.0",
