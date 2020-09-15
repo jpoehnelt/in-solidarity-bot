@@ -18,7 +18,6 @@ import { annotate, getLevelFromAnnotations } from "./annotate";
 
 import { DEFAULT_CONFIGURATION } from "./config";
 import { Level } from "./rules";
-import { Octokit } from "@octokit/rest/";
 import fs from "fs";
 import { parse } from "./parse";
 
@@ -83,6 +82,6 @@ test("should get correct level from annotations", () => {
       { annotation_level: "notice" },
       { annotation_level: "warning" },
       { annotation_level: "failure" },
-    ] as Octokit.ChecksUpdateParamsOutputAnnotations[])
+    ] as any)
   ).toBe(Level.FAILURE);
 });

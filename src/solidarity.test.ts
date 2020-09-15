@@ -16,9 +16,8 @@
 
 import { Conclusion, OutputTitle, Solidarity } from "./solidarity";
 
-import { Context } from "probot";
 import { DEFAULT_CONFIGURATION } from "./config";
-import { LoggerWithTarget } from "probot/lib/wrap-logger";
+import { Logger } from "probot";
 import fs from "fs";
 import { parse } from "./parse";
 
@@ -29,8 +28,8 @@ const failingDIff = parse(
 
 test("solidarity should run check on failing diff", async () => {
   const s = new Solidarity(
-    { name: "foo", id: "bar", payload: payload } as Context,
-    ({ info: jest.fn() } as unknown) as LoggerWithTarget
+    { name: "foo", id: "bar", payload: payload } as any,
+    ({ info: jest.fn() } as unknown) as Logger
   );
 
   s.diff = jest.fn().mockReturnValue(failingDIff);
@@ -44,8 +43,8 @@ test("solidarity should run check on failing diff", async () => {
 
 test("solidarity should have correct properties from payload", async () => {
   const s = new Solidarity(
-    { name: "foo", id: "bar", payload: payload } as Context,
-    ({ info: jest.fn() } as unknown) as LoggerWithTarget
+    { name: "foo", id: "bar", payload: payload } as any,
+    ({ info: jest.fn() } as unknown) as Logger
   );
   expect(s.owner).toEqual("jpoehnelt");
   expect(s.repo).toEqual("in-solidarity-bot");

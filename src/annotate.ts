@@ -13,18 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import { Configuration } from "./config";
 import { File } from "gitdiff-parser";
 import { Level } from "./rules";
-import { Octokit } from "@octokit/rest/";
 import minimatch from "minimatch";
+
+export type ChecksUpdateParamsOutputAnnotations = {
+  path: string;
+  start_line: number;
+  end_line: number;
+  start_column?: number;
+  end_column?: number;
+  annotation_level: "notice" | "warning" | "failure";
+  message: string;
+  title?: string;
+  raw_details?: string;
+};
 
 export const annotate = (
   config: Configuration,
   files: File[]
-): Octokit.ChecksUpdateParamsOutputAnnotations[] => {
-  const annotations: Octokit.ChecksUpdateParamsOutputAnnotations[] = [];
+): ChecksUpdateParamsOutputAnnotations[] => {
+  const annotations: ChecksUpdateParamsOutputAnnotations[] = [];
 
   for (const f of files) {
     if (
@@ -69,7 +79,7 @@ export const annotate = (
 const levels = [Level.OFF, Level.NOTICE, Level.WARNING, Level.FAILURE];
 
 export const getLevelFromAnnotations = (
-  annotations: Octokit.ChecksUpdateParamsOutputAnnotations[]
+  annotations: ChecksUpdateParamsOutputAnnotations[]
 ): Level => {
   let level = Level.OFF;
 
