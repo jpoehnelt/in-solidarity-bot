@@ -29,7 +29,7 @@ steps:
       [
         "run",
         "deploy",
-        "in-solidarity-bot",
+        "in-solidarity-bot-$BRANCH_NAME",
         "--image",
         "gcr.io/$PROJECT_ID/in-solidarity-bot:$COMMIT_SHA",
         "--region",
