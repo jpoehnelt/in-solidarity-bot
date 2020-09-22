@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@types/minimatch": "^3.0.3",
-    "ajv": "^6.12.4",
+    "ajv": "^6.12.5",
     "deepmerge": "^4.2.2",
     "gitdiff-parser": "^0.2.2",
     "js-yaml": "^3.14.0",
