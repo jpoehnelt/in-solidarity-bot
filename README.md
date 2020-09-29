@@ -6,6 +6,7 @@
 [![codecov](https://codecov.io/gh/jpoehnelt/in-solidarity-bot/branch/master/graph/badge.svg)](https://codecov.io/gh/jpoehnelt/in-solidarity-bot)
 ![GitHub contributors](https://img.shields.io/github/contributors/jpoehnelt/in-solidarity-bot?color=green)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+[![npm](https://img.shields.io/npm/v/in-solidarity-bot)](https://www.npmjs.com/package/in-solidarity-bot)
 [![](./static//badge-flat.png)](https://github.com/apps/in-solidarity)
 
 > A GitHub Bot built with [Probot](https://github.com/probot/probot) that checks for inclusive language. See [help](./static/HELP.md) for more information.
