@@ -39,4 +39,4 @@ jobs:
             "@semantic-release/npm"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM: "notoken"
+          NPM_TOKEN: ${{ secrets.NPM_WOMBAT_TOKEN }}
