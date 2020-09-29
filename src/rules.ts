@@ -27,4 +27,16 @@ export const DEFAULT_RULES: { [key: string]: Rule } = {
     regex: [/black[_-]*list/gi],
     level: Level.WARNING,
   },
+  grandfathered: {
+    regex: [/grandfathered/gi],
+    level: Level.WARNING,
+  },
+  sanity_check: {
+    regex: [/sanity[_-]*check/gi],
+    level: Level.WARNING,
+  },
+  man_hours: {
+    regex: [/man[_-]*hours/gi],
+    level: Level.WARNING,
+  },
 };
