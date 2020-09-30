@@ -20,6 +20,7 @@ import { DEFAULT_CONFIGURATION } from "./config";
 import { Logger } from "probot";
 import fs from "fs";
 import { parse } from "./parse";
+import { version } from "../package.json";
 
 const payload = JSON.parse(fs.readFileSync("./fixtures/payload.json", "utf8"));
 const failingDIff = parse(
@@ -39,6 +40,7 @@ test("solidarity should run check on failing diff", async () => {
   expect(conclusion).toBe(Conclusion.NEUTRAL);
   expect(output.title).toEqual(OutputTitle.WARNING);
   expect(output.annotations?.length).toEqual(2);
+  expect(output.summary).toMatch(/^For more information/);
 });
 
 test("solidarity should have correct properties from payload", async () => {
@@ -56,4 +58,15 @@ test("solidarity should have correct properties from payload", async () => {
     name: "Inclusive Language",
   });
   expect(s.pullNumber).toEqual(24);
+});
+
+test("solidarity should generate correct summary", async () => {
+  const s = new Solidarity(
+    { name: "foo", id: "bar", payload: payload } as any,
+    ({ info: jest.fn() } as unknown) as Logger
+  );
+  s.config = DEFAULT_CONFIGURATION;
+
+  expect(s.summary('')).toMatch(`App version: [${version}]`);
+  expect(s.summary('foo')).toMatch(/^foo/);
 });
