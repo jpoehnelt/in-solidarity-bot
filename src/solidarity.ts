@@ -25,11 +25,11 @@ import { Context, Logger } from "probot";
 import { File } from "gitdiff-parser";
 import { Level } from "./rules";
 import { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
-import { dump } from "js-yaml";
 import fs from "fs";
 import handlebars from "handlebars";
 import { parse } from "./parse";
 import path from "path";
+import { safeDump } from "js-yaml";
 import { version } from "../package.json";
 
 type ChecksCreateParams = RestEndpointMethodTypes["checks"]["create"]["parameters"];
@@ -268,7 +268,11 @@ export class Solidarity {
     return { conclusion, output };
   }
 
-  summary(message: string): string {
+  summary(
+    message: string,
+    v: string = version,
+    sha: string = process.env.sha || "unknown"
+  ): string {
     let config: Configuration | undefined = undefined;
 
     if (this.config) {
@@ -285,9 +289,9 @@ export class Solidarity {
 
     return SUMMARY_TEMPLATE({
       message,
-      version,
-      sha: process.env.SHA || "unknown",
-      config: config ? dump(config) : null,
+      sha,
+      version: v,
+      config: config ? safeDump(config) : null,
     });
   }
 }

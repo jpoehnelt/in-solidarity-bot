@@ -20,12 +20,19 @@ import { DEFAULT_CONFIGURATION } from "./config";
 import { Logger } from "probot";
 import fs from "fs";
 import { parse } from "./parse";
-import { version } from "../package.json";
 
 const payload = JSON.parse(fs.readFileSync("./fixtures/payload.json", "utf8"));
 const failingDIff = parse(
   fs.readFileSync("./fixtures/pull.failing.diff", "utf8")
 );
+
+beforeAll(() => {
+  jest.mock("../package.json", () => {
+    return {
+      version: "1.1.0",
+    };
+  });
+});
 
 test("solidarity should run check on failing diff", async () => {
   const s = new Solidarity(
@@ -40,7 +47,6 @@ test("solidarity should run check on failing diff", async () => {
   expect(conclusion).toBe(Conclusion.NEUTRAL);
   expect(output.title).toEqual(OutputTitle.WARNING);
   expect(output.annotations?.length).toEqual(2);
-  expect(output.summary).toMatchSnapshot();
 });
 
 test("solidarity should have correct properties from payload", async () => {
@@ -66,5 +72,5 @@ test("solidarity should generate correct summary", async () => {
     ({ info: jest.fn() } as unknown) as Logger
   );
   s.config = DEFAULT_CONFIGURATION;
-  expect(s.summary("foo")).toMatchSnapshot();
+  expect(s.summary("foo", "1.0.0")).toMatchSnapshot();
 });
