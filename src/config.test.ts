@@ -30,6 +30,7 @@ test("should override default rules", async () => {
   expect(config.rules.master).toEqual({
     level: "off",
     regex: [/master/gi],
+    alternatives: DEFAULT_CONFIGURATION.rules.master.alternatives,
   });
   expect(config.ignore).toEqual([".github/in-solidarity.yml", "**/*.yml"]);
 });
