@@ -21,7 +21,6 @@ import fs from "fs";
 import handlebars from "handlebars";
 import path from "path";
 
-console.log(__dirname);
 /// Write individual rule pages
 const RULE_TEMPLATE = handlebars.compile(
   fs.readFileSync(path.join(__dirname, "../templates/RULE.hbs"), "utf8")
