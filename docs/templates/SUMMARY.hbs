@@ -1,7 +1,19 @@
 {{#if message }}
+## Message
 {{{message}}}
-
 {{/if}}
+
+## Configuration
+{{#if config}}
+Below is the configuration used for this check run:
+```yml
+{{{config}}}
+```
+{{/if}}
+
 For more information on configuration and rules, check the [documentation](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/docs/README.md).
 
-App version: [v{{version}} sha:{{sha}}](https://github.com/jpoehnelt/in-solidarity-bot/releases/tag/v{{version}})
+## App version
+* version: [v{{version}}](https://github.com/jpoehnelt/in-solidarity-bot/releases/tag/v{{version}})
+
+* sha: [{{sha}}](https://github.com/jpoehnelt/in-solidarity-bot/commit/{{sha}})
