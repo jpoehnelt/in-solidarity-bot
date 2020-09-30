@@ -26,7 +26,9 @@ import { File } from "gitdiff-parser";
 import { Level } from "./rules";
 import { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 import fs from "fs";
+import handlebars from "handlebars";
 import { parse } from "./parse";
+import { version } from "../package.json";
 
 type ChecksCreateParams = RestEndpointMethodTypes["checks"]["create"]["parameters"];
 
@@ -36,7 +38,10 @@ export type ChecksUpdateParamsOutput = {
   annotations?: ChecksUpdateParamsOutputAnnotations[];
 };
 
-const SUMMARY = fs.readFileSync("./static/HELP.md", "utf8");
+const SUMMARY_TEMPLATE = handlebars.compile(
+  fs.readFileSync("./docs/templates/SUMMARY.hbs", "utf8")
+);
+
 const CHECK_NAME = "Inclusive Language";
 
 export enum Conclusion {
@@ -108,18 +113,18 @@ export class Solidarity {
         conclusion = Conclusion.FAILURE;
         output = {
           title: OutputTitle.ERROR,
-          summary: "Configuration is invalid.",
+          summary: this.summary(e.message),
         };
       } else {
         conclusion = Conclusion.CANCELLED;
         output = {
           title: OutputTitle.ERROR,
-          summary: "Could not load configuration.",
+          summary: this.summary("Could not load configuration."),
         };
       }
 
       this.logger.error(
-        { labels: { ...this.checkOptions }, err: e },
+        { labels: { ...this.checkOptions, version }, err: e },
         output.summary
       );
 
@@ -135,24 +140,26 @@ export class Solidarity {
       if (e.status === 403) {
         output = {
           title: OutputTitle.PERMISSION_NEEDED,
-          summary:
-            "Check only runs on public repositories to limit required permissions. See https://github.com/jpoehnelt/in-solidarity-bot/issues/16.",
+          summary: this.summary(
+            "Check only runs on public repositories to limit required permissions. See https://github.com/jpoehnelt/in-solidarity-bot/issues/16."
+          ),
         };
 
         this.logger.info(
-          { labels: { ...this.checkOptions } },
+          { labels: { ...this.checkOptions, version } },
           "Failed to check private repository"
         );
       } else {
         output = {
           title: OutputTitle.ERROR,
-          summary: "Check failed to complete.",
+          summary: this.summary("Check failed to complete."),
         };
 
         this.logger.error(
           {
             labels: {
               ...this.checkOptions,
+              version,
               config: this.config,
               payload: this.context.payload,
             },
@@ -221,7 +228,7 @@ export class Solidarity {
     let conclusion: Conclusion;
     const output: ChecksUpdateParamsOutput = {
       title: CHECK_NAME,
-      summary: SUMMARY,
+      summary: this.summary(""),
     };
     const diff = await this.diff();
 
@@ -257,5 +264,13 @@ export class Solidarity {
     });
 
     return { conclusion, output };
+  }
+
+  summary(message: string): string {
+    return SUMMARY_TEMPLATE({
+      message,
+      version,
+      sha: process.env.SHA || "unknown",
+    });
   }
 }

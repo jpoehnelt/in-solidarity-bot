@@ -39,4 +39,7 @@ WORKDIR /usr/src/app
 # copy from build image
 COPY --from=BUILD_IMAGE /usr/src/app .
 
+ARG SHA
+ENV SHA=$SHA
+
 ENTRYPOINT [ "npm", "start" ]
