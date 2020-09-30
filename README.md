@@ -52,6 +52,10 @@ npm install
 # Run typescript
 npm run build
 
+# Test
+npm test  # npm test -- -u to update snapshots
+npm run lint  # npm run format to fix issues
+
 # Set appropriate .env values and run the bot
 npm start
 ```
