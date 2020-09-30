@@ -17,7 +17,8 @@
     "format": "eslint src/*.ts --fix",
     "lint": "eslint src/*.ts",
     "start": "probot run ./dist/src/index.js",
-    "test": "jest --passWithNoTests",
+    "test": "jest",
+    "test:update": "jest --updateSnapshot",
     "docs": "node ./dist/docs/index.js"
   },
   "jest": {

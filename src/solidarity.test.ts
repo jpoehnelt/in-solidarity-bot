@@ -40,7 +40,7 @@ test("solidarity should run check on failing diff", async () => {
   expect(conclusion).toBe(Conclusion.NEUTRAL);
   expect(output.title).toEqual(OutputTitle.WARNING);
   expect(output.annotations?.length).toEqual(2);
-  expect(output.summary).toMatch(/^For more information/);
+  expect(output.summary).toMatchSnapshot();
 });
 
 test("solidarity should have correct properties from payload", async () => {
@@ -66,9 +66,5 @@ test("solidarity should generate correct summary", async () => {
     ({ info: jest.fn() } as unknown) as Logger
   );
   s.config = DEFAULT_CONFIGURATION;
-
-  expect(s.summary("")).toMatch(
-    `App version: [v${version}|sha:${process.env.SHA || "unknown"}]`
-  );
-  expect(s.summary("foo")).toMatch(/^foo/);
+  expect(s.summary("foo")).toMatchSnapshot();
 });

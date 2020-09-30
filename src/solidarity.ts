@@ -25,6 +25,7 @@ import { Context, Logger } from "probot";
 import { File } from "gitdiff-parser";
 import { Level } from "./rules";
 import { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
+import { dump } from "js-yaml";
 import fs from "fs";
 import handlebars from "handlebars";
 import { parse } from "./parse";
@@ -267,10 +268,25 @@ export class Solidarity {
   }
 
   summary(message: string): string {
+    let config: Configuration | undefined = undefined;
+
+    if (this.config) {
+      config = { ...this.config };
+      config.rules = {};
+
+      Object.keys(this.config.rules).forEach((k) => {
+        config!.rules[k] = {
+          ...this.config!.rules[k],
+          regex: this.config!.rules[k].regex.map((r) => r.toString()),
+        };
+      });
+    }
+
     return SUMMARY_TEMPLATE({
       message,
       version,
       sha: process.env.SHA || "unknown",
+      config: config ? dump(config) : null,
     });
   }
 }
