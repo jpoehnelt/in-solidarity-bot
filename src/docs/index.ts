@@ -15,20 +15,23 @@
  * limitations under the License.
  */
 
-
-import { DEFAULT_RULES, Level } from "../src/rules";
+import { DEFAULT_RULES, Level } from "../rules";
 
 import fs from "fs";
 import handlebars from "handlebars";
+import path from "path";
 
+console.log(__dirname);
 /// Write individual rule pages
 const RULE_TEMPLATE = handlebars.compile(
-  fs.readFileSync("docs/templates/RULE.hbs", "utf8")
+  fs.readFileSync(path.join(__dirname, "../templates/RULE.hbs"), "utf8")
 );
+
+fs.mkdirSync(path.join(__dirname, `../../../docs/rules`), { recursive: true });
 
 for (const k in DEFAULT_RULES) {
   fs.writeFileSync(
-    `docs/rules/${k}.md`,
+    path.join(__dirname, `../../../docs/rules/${k}.md`),
     RULE_TEMPLATE({
       ...DEFAULT_RULES[k],
       levels: Object.values(Level),
@@ -40,11 +43,11 @@ for (const k in DEFAULT_RULES) {
 
 /// Write rule index page
 const README_TEMPLATE = handlebars.compile(
-  fs.readFileSync("docs/templates/README.hbs", "utf8")
+  fs.readFileSync(path.join(__dirname, "../templates/README.hbs"), "utf8")
 );
 
 fs.writeFileSync(
-  `docs/README.md`,
+  path.join(__dirname, `../../../docs/README.md`),
   README_TEMPLATE({
     rules: Object.keys(DEFAULT_RULES).map((k) => {
       return {
