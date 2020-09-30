@@ -140,8 +140,9 @@ export class Solidarity {
       if (e.status === 403) {
         output = {
           title: OutputTitle.PERMISSION_NEEDED,
-          summary:
-            this.summary("Check only runs on public repositories to limit required permissions. See https://github.com/jpoehnelt/in-solidarity-bot/issues/16."),
+          summary: this.summary(
+            "Check only runs on public repositories to limit required permissions. See https://github.com/jpoehnelt/in-solidarity-bot/issues/16."
+          ),
         };
 
         this.logger.info(
@@ -227,7 +228,7 @@ export class Solidarity {
     let conclusion: Conclusion;
     const output: ChecksUpdateParamsOutput = {
       title: CHECK_NAME,
-      summary: this.summary(''),
+      summary: this.summary(""),
     };
     const diff = await this.diff();
 
@@ -266,6 +267,10 @@ export class Solidarity {
   }
 
   summary(message: string): string {
-    return SUMMARY_TEMPLATE({ message, version, config: this.config });
+    return SUMMARY_TEMPLATE({
+      message,
+      version,
+      sha: process.env.SHA || "unknown",
+    });
   }
 }

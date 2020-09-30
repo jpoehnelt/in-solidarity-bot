@@ -67,6 +67,8 @@ test("solidarity should generate correct summary", async () => {
   );
   s.config = DEFAULT_CONFIGURATION;
 
-  expect(s.summary('')).toMatch(`App version: [${version}]`);
-  expect(s.summary('foo')).toMatch(/^foo/);
+  expect(s.summary("")).toMatch(
+    `App version: [v${version}|sha:${process.env.SHA || "unknown"}]`
+  );
+  expect(s.summary("foo")).toMatch(/^foo/);
 });
