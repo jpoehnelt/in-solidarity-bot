@@ -35,26 +35,9 @@ Share this app with one of the following badges.
 
 [![](https://github.com/jpoehnelt/in-solidarity-bot/raw/main/static//badge-for-the-badge.png)](https://github.com/apps/in-solidarity)
 
-### Configuration
+## Documentation
 
-The bot can be configured with a file located at `.github/in-solidarity.yml` in the target repo or at the same path in a repo named `.github` in the organization.  
-
-```yaml
-rules:
-  master:
-    level: off
-  slave:
-    level: failure
-ignore:
- - ".github/in-solidarity.yml"  # default
- - "**/*.yml"
-```
-The possible levels are `['off', 'notice', 'warning', 'failure']`. These correspond to [annotation_level in the GitHub API](https://docs.github.com/en/rest/reference/checks#create-a-check-run).
-
-The rule names and the associated regex patterns are in [rules.ts](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/src/rules.ts). Contributions are welcome!
-
-> **Note**: The bot uses the configuration from the default branch. Therefore any changes to the configuration in a pull request will not be used until merged.
-
+Rules and configuration options are at [./docs/README.md](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/docs/README.md).
 
 ## Production
 

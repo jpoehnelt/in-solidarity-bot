@@ -1,0 +1,35 @@
+# Rule: `{{{rule}}}`
+
+This rule uses the following patterns: 
+{{#each regex}}
+* `{{this}}`
+{{/each}}
+
+It has a default check level of: `{{{level}}}`
+
+{{#if alternatives}}
+## Alternatives
+{{#each alternatives}}
+* `{{this}}`
+{{/each}}
+{{/if}}
+
+## Configuration
+
+This check level of this rule can be modified with the following:
+
+```yml
+rules:
+  {{{rule}}}:
+    level: {{{levels.[3]}}}
+```
+
+Available levels: 
+
+{{#each levels}}
+* `{{this}}`
+{{/each}}
+
+Additional rules and configuration options are at [docs/README.md](../README.md).
+
+_This document is generated from a template using [rules.ts](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/src/rules.ts) and [docs/index.ts](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/docs/index.ts)._

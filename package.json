@@ -16,16 +16,17 @@
     "build": "tsc -p tsconfig.json",
     "format": "eslint src/*.ts --fix",
     "lint": "eslint src/*.ts",
-    "start": "probot run ./dist/index.js",
-    "test": "jest --passWithNoTests"
+    "start": "probot run ./dist/src/index.js",
+    "test": "jest --passWithNoTests",
+    "docs": "node ./dist/docs/index.js"
   },
   "jest": {
     "testEnvironment": "node"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "files": [
-    "dist/*",
+    "dist/**/*",
     "src/*",
     "fixtures/*",
     "static/*"
@@ -52,6 +53,7 @@
     "eslint-plugin-jest": "^24.0.2",
     "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-typescript": "^0.14.0",
+    "handlebars": "^4.7.6",
     "jest": "^26.4.2",
     "nock": "^13.0.4",
     "prettier": "^2.1.2",
