@@ -35,13 +35,99 @@ test("should override default rules", async () => {
   expect(config.ignore).toEqual([".github/in-solidarity.yml", "**/*.yml"]);
 });
 
-test("should throw for invalid config", async () => {
+test("should override default rules", async () => {
+  const config = await getConfig(fakeContext);
+  expect(config.rules.master).toEqual({
+    level: "off",
+    regex: [/master/gi],
+    alternatives: DEFAULT_CONFIGURATION.rules.master.alternatives,
+  });
+  expect(config.ignore).toEqual([".github/in-solidarity.yml", "**/*.yml"]);
+});
+
+test("should override default alternatives", async () => {
   const context = ({
     config: async () => {
       return {
         rules: {
           master: {
-            regex: "MaStEr",
+            alternatives: ["PRIMARY"],
+          },
+        },
+      };
+    },
+  } as unknown) as Context;
+  const config = await getConfig(context);
+  expect(config.rules.master.alternatives).toEqual(["PRIMARY"]);
+});
+
+test("should throw for invalid regex pattern", async () => {
+  const context = ({
+    config: async () => {
+      return {
+        rules: {
+          master: {
+            regex: ["MaStEr"],
+          },
+        },
+      };
+    },
+  } as unknown) as Context;
+  await expect(getConfig(context)).rejects.toBeInstanceOf(InvalidConfigError);
+});
+
+test("should throw for empty regex array", async () => {
+  const context = ({
+    config: async () => {
+      return {
+        rules: {
+          master: {
+            level: "off",
+            regex: [],
+          },
+        },
+      };
+    },
+  } as unknown) as Context;
+  await expect(getConfig(context)).rejects.toBeInstanceOf(InvalidConfigError);
+});
+
+test("should ignore defaults", async () => {
+  const context = ({
+    config: async () => {
+      return {
+        rules: {
+          slave: {
+            regex: ["/slave/gi"],
+          },
+        },
+        ignoreDefaults: true,
+      };
+    },
+  } as unknown) as Context;
+  const config = await getConfig(context);
+  expect(config).toMatchInlineSnapshot(`
+    Object {
+      "ignore": Array [],
+      "ignoreDefaults": true,
+      "rules": Object {
+        "slave": Object {
+          "regex": Array [
+            /slave/gi,
+          ],
+        },
+      },
+    }
+  `);
+});
+
+test("should throw for invalid flags", async () => {
+  const context = ({
+    config: async () => {
+      return {
+        rules: {
+          master: {
+            regex: ["/master/m"],
           },
         },
       };

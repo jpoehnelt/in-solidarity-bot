@@ -1,5 +1,5 @@
 # Configuration
-The bot can be configured with a file located at `.github/in-solidarity.yml` in the target repo or at the same path in a repo named `.github` in the organization.  
+The bot can be configured with a file located at `.github/in-solidarity.yml` in the target repo or at the same path in a repo named `.github` within the organization.  
 
 ```yaml
 rules:
@@ -7,13 +7,35 @@ rules:
     level: off
   slave:
     level: failure
+  foo:
+    regex:
+      - /foo/gi
+      - /foobar/gi
+    level: failure
 ignore:
  - ".github/in-solidarity.yml"  # default
  - "**/*.yml"
 ```
 The possible levels are `['off', 'notice', 'warning', 'failure']`. These correspond to [annotation_level in the GitHub API](https://docs.github.com/en/rest/reference/checks#create-a-check-run).
 
+The default configuration can be ignored with `ignoreDefaults: true` such as in the following.
+
+```yaml
+rules:
+  foo:
+    regex:
+      - /foo/gi
+      - /foobar/gi
+    level: failure
+ignoreDefaults: true
+```
+This will only check the single rule. 
+
+The merge of defaults uses array replacement. This means any array provided by configuration will be used and defaults elements ignored.
+
 > **Note**: The bot uses the configuration from the default branch. Therefore any changes to the configuration in a pull request will not be used until merged.
+
+Read more about configuration for organizations at [Probot best practices](https://github.com/probot/probot/blob/master/docs/best-practices.md#store-configuration-in-the-repository).
 
 # Rules
 
