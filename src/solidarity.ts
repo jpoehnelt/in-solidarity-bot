@@ -29,6 +29,7 @@ import { dump } from "js-yaml";
 import fs from "fs";
 import handlebars from "handlebars";
 import { parse } from "./parse";
+import path from "path";
 import { version } from "../package.json";
 
 type ChecksCreateParams = RestEndpointMethodTypes["checks"]["create"]["parameters"];
@@ -40,7 +41,7 @@ export type ChecksUpdateParamsOutput = {
 };
 
 const SUMMARY_TEMPLATE = handlebars.compile(
-  fs.readFileSync("./docs/templates/SUMMARY.hbs", "utf8")
+  fs.readFileSync(path.join(__dirname, "templates/SUMMARY.hbs"), "utf8")
 );
 
 const CHECK_NAME = "Inclusive Language";
