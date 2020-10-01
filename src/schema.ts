@@ -42,6 +42,7 @@ const defaultRule = {
   properties: {
     level: { $ref: "#/definitions/level" },
     alternatives: { $ref: "#/definitions/alternatives" },
+    regex: { $ref: "#/definitions/regex" },
   },
 };
 
@@ -51,17 +52,12 @@ const defaultRules = Object.keys(DEFAULT_RULES).reduce((obj, k) => {
 }, {});
 
 const customRules = {
-  type: "object",
-  additionalProperties: false,
-  properties: {
-    ...defaultRule.properties,
-    regex: { $ref: "#/definitions/regex" },
-  },
+  ...defaultRule,
   required: ["level", "regex"],
 };
 
 export const schema = {
-  $schema: "https://json-schema.org/draft-07/schema#",
+  $schema: "http://json-schema.org/draft-07/schema#",
   type: "object",
   additionalProperties: false,
   definitions: { level, regex, alternatives },

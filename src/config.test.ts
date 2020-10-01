@@ -35,32 +35,22 @@ test("should override default rules", async () => {
   expect(config.ignore).toEqual([".github/in-solidarity.yml", "**/*.yml"]);
 });
 
-test("should throw if changing default regex", async () => {
+test("should allow changing default regex", async () => {
   const context = ({
     config: async () => {
       return {
         rules: {
           master: {
-            regex: ["master"],
+            regex: ["/MaStEr/g"],
           },
         },
       };
     },
   } as unknown) as Context;
-  await expect(getConfig(context)).rejects.toMatchInlineSnapshot(`
-          [Error: configuration is invalid: [
-            {
-              "keyword": "additionalProperties",
-              "dataPath": ".rules.master",
-              "schemaPath": "#/properties/rules/properties/master/additionalProperties",
-              "params": {
-                "additionalProperty": "regex"
-              },
-              "message": "should NOT have additional properties"
-            }
-          ]]
-        `);
+  const config = await getConfig(context);
+  expect(config.rules.master.regex[0]).toEqual(/MaStEr/g);
 });
+
 test("should override default alternatives", async () => {
   const context = ({
     config: async () => {
