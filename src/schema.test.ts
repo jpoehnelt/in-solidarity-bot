@@ -19,10 +19,12 @@ import { ajv, schema } from "./schema";
 const validate = ajv.compile(schema);
 
 test("should validate", () => {
-  validate({rules: {
-    master: {level: "off"},
-    foo: {level: "failure", regex: ["/foo/gi"]}
-  }});
+  validate({
+    rules: {
+      master: { level: "off" },
+      foo: { level: "failure", regex: ["/foo/gi"] },
+    },
+  });
   expect(validate.errors).toBeFalsy();
 });
 
