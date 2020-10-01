@@ -13,13 +13,13 @@
   "license": "Apache 2.0",
   "author": "Justin Poehnelt <justin.poehnelt@gmail.com>",
   "scripts": {
-    "build": "tsc -p tsconfig.json && cp -avr src/templates/ dist/src/templates/",
+    "build": "rm -rf dist && tsc -p tsconfig.json && cp -avr src/templates/ dist/src/templates/",
     "format": "eslint src/*.ts --fix",
     "lint": "eslint src/*.ts",
     "start": "probot run ./dist/src/index.js",
     "test": "jest",
     "test:update": "jest --updateSnapshot",
-    "docs": "node ./dist/src/docs/index.js"
+    "docs": "rm -rf docs && node ./dist/src/docs/index.js"
   },
   "jest": {
     "testEnvironment": "node"

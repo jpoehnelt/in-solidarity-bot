@@ -15,7 +15,9 @@
 rules:
   master:
     level: off
-    regex: ["/master/gi"]
+  foo:
+    level: failure
+    regex: ["/foo/gi"]
 ignore:
  - ".github/in-solidarity.yml"
  - "**/*.yml"

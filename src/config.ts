@@ -15,8 +15,8 @@
  */
 
 import { DEFAULT_RULES, Level, Rule } from "./rules";
+import { ajv, schema } from "./schema";
 
-import Ajv from "ajv";
 import { Context } from "probot";
 import deepmerge from "deepmerge";
 import regexParser from "regex-parser";
@@ -48,54 +48,6 @@ export const DEFAULT_CONFIGURATION: Configuration = {
 
 const CONFIG_FILE = "in-solidarity.yml";
 
-const ajv = new Ajv({ allErrors: true });
-
-const rulesPropertiesSchema = Object.keys(DEFAULT_RULES).reduce((obj, k) => {
-  obj[k] = {
-    type: "object",
-    additionalProperties: false,
-    properties: {
-      level: { type: "string", enum: Object.values(Level) },
-      regex: {
-        type: "array",
-        minItems: 1,
-        items: {
-          type: "string",
-          pattern: "^/.*/[giu]*$",
-        },
-      },
-      alternatives: {
-        type: "array",
-        items: {
-          type: "string",
-          minLength: 2,
-        },
-      },
-    },
-  };
-  return obj;
-}, {});
-
-const schema = {
-  type: "object",
-  additionalProperties: false,
-  properties: {
-    rules: {
-      type: "object",
-      additionalProperties: false,
-      properties: rulesPropertiesSchema,
-    },
-    ignore: {
-      type: "array",
-      minitems: 1,
-      items: { type: "string" },
-    },
-    ignoreDefaults: {
-      type: "boolean",
-    },
-  },
-};
-
 export const getConfig = async (context: Context): Promise<Configuration> => {
   const validate = ajv.compile(schema);
 
@@ -104,7 +56,7 @@ export const getConfig = async (context: Context): Promise<Configuration> => {
   if (repoConfig) {
     if (!validate(repoConfig)) {
       throw new InvalidConfigError(
-        "configuration is invalid: " + JSON.stringify(validate.errors)
+        "configuration is invalid: " + JSON.stringify(validate.errors, null, 2)
       );
     }
 

@@ -1,5 +1,5 @@
 # Configuration
-The bot can be configured with a file located at `.github/in-solidarity.yml` in the target repo or at the same path in a repo named `.github` within the organization.  
+The bot can be configured with a file located at `.github/in-solidarity.yml` in the target repo or at the same path in a repo named `.github` within the organization. The JSON schema is located at [docs/schema.json](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/docs/schema.json).
 
 ```yaml
 rules:
@@ -31,7 +31,7 @@ ignoreDefaults: true
 ```
 This will only check the single rule. 
 
-The merge of defaults uses array replacement. This means any array provided by configuration will be used and defaults elements ignored.
+> **Note**: The merging of defaults uses array replacement. This means any array provided by the configuration will be used and default elements ignored.
 
 > **Note**: The bot uses the configuration from the default branch. Therefore any changes to the configuration in a pull request will not be used until merged.
 

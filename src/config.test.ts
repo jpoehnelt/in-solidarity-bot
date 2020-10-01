@@ -29,22 +29,38 @@ test("should override default rules", async () => {
   const config = await getConfig(fakeContext);
   expect(config.rules.master).toEqual({
     level: "off",
-    regex: [/master/gi],
+    regex: DEFAULT_CONFIGURATION.rules.master.regex,
     alternatives: DEFAULT_CONFIGURATION.rules.master.alternatives,
   });
   expect(config.ignore).toEqual([".github/in-solidarity.yml", "**/*.yml"]);
 });
 
-test("should override default rules", async () => {
-  const config = await getConfig(fakeContext);
-  expect(config.rules.master).toEqual({
-    level: "off",
-    regex: [/master/gi],
-    alternatives: DEFAULT_CONFIGURATION.rules.master.alternatives,
-  });
-  expect(config.ignore).toEqual([".github/in-solidarity.yml", "**/*.yml"]);
+test("should throw if changing default regex", async () => {
+  const context = ({
+    config: async () => {
+      return {
+        rules: {
+          master: {
+            regex: ["master"],
+          },
+        },
+      };
+    },
+  } as unknown) as Context;
+  await expect(getConfig(context)).rejects.toMatchInlineSnapshot(`
+          [Error: configuration is invalid: [
+            {
+              "keyword": "additionalProperties",
+              "dataPath": ".rules.master",
+              "schemaPath": "#/properties/rules/properties/master/additionalProperties",
+              "params": {
+                "additionalProperty": "regex"
+              },
+              "message": "should NOT have additional properties"
+            }
+          ]]
+        `);
 });
-
 test("should override default alternatives", async () => {
   const context = ({
     config: async () => {
@@ -66,14 +82,35 @@ test("should throw for invalid regex pattern", async () => {
     config: async () => {
       return {
         rules: {
-          master: {
-            regex: ["MaStEr"],
+          foo: {
+            regex: ["foo"],
           },
         },
       };
     },
   } as unknown) as Context;
-  await expect(getConfig(context)).rejects.toBeInstanceOf(InvalidConfigError);
+  await expect(getConfig(context)).rejects.toMatchInlineSnapshot(`
+          [Error: configuration is invalid: [
+            {
+              "keyword": "required",
+              "dataPath": ".rules['foo']",
+              "schemaPath": "#/properties/rules/additionalProperties/required",
+              "params": {
+                "missingProperty": "level"
+              },
+              "message": "should have required property 'level'"
+            },
+            {
+              "keyword": "pattern",
+              "dataPath": ".rules['foo'].regex[0]",
+              "schemaPath": "#/definitions/regex/items/pattern",
+              "params": {
+                "pattern": "^/.+/[giu]*$"
+              },
+              "message": "should match pattern \\"^/.+/[giu]*$\\""
+            }
+          ]]
+        `);
 });
 
 test("should throw for empty regex array", async () => {
@@ -81,7 +118,7 @@ test("should throw for empty regex array", async () => {
     config: async () => {
       return {
         rules: {
-          master: {
+          foo: {
             level: "off",
             regex: [],
           },
@@ -89,7 +126,19 @@ test("should throw for empty regex array", async () => {
       };
     },
   } as unknown) as Context;
-  await expect(getConfig(context)).rejects.toBeInstanceOf(InvalidConfigError);
+  await expect(getConfig(context)).rejects.toMatchInlineSnapshot(`
+          [Error: configuration is invalid: [
+            {
+              "keyword": "minItems",
+              "dataPath": ".rules['foo'].regex",
+              "schemaPath": "#/definitions/regex/minItems",
+              "params": {
+                "limit": 1
+              },
+              "message": "should NOT have fewer than 1 items"
+            }
+          ]]
+        `);
 });
 
 test("should ignore defaults", async () => {
@@ -97,8 +146,9 @@ test("should ignore defaults", async () => {
     config: async () => {
       return {
         rules: {
-          slave: {
-            regex: ["/slave/gi"],
+          foo: {
+            level: "failure",
+            regex: ["/foo/gi"],
           },
         },
         ignoreDefaults: true,
@@ -111,9 +161,10 @@ test("should ignore defaults", async () => {
       "ignore": Array [],
       "ignoreDefaults": true,
       "rules": Object {
-        "slave": Object {
+        "foo": Object {
+          "level": "failure",
           "regex": Array [
-            /slave/gi,
+            /foo/gi,
           ],
         },
       },
@@ -121,19 +172,64 @@ test("should ignore defaults", async () => {
   `);
 });
 
+test("should throw if ignoring defaults without rules", async () => {
+  const context = ({
+    config: async () => {
+      return {
+        ignoreDefaults: true,
+      };
+    },
+  } as unknown) as Context;
+  await expect(getConfig(context)).rejects.toMatchInlineSnapshot(`
+          [Error: configuration is invalid: [
+            {
+              "keyword": "required",
+              "dataPath": "",
+              "schemaPath": "#/then/required",
+              "params": {
+                "missingProperty": "rules"
+              },
+              "message": "should have required property 'rules'"
+            },
+            {
+              "keyword": "if",
+              "dataPath": "",
+              "schemaPath": "#/if",
+              "params": {
+                "failingKeyword": "then"
+              },
+              "message": "should match \\"then\\" schema"
+            }
+          ]]
+        `);
+});
+
 test("should throw for invalid flags", async () => {
   const context = ({
     config: async () => {
       return {
         rules: {
-          master: {
+          foo: {
+            level: "failure",
             regex: ["/master/m"],
           },
         },
       };
     },
   } as unknown) as Context;
-  await expect(getConfig(context)).rejects.toBeInstanceOf(InvalidConfigError);
+  await expect(getConfig(context)).rejects.toMatchInlineSnapshot(`
+          [Error: configuration is invalid: [
+            {
+              "keyword": "pattern",
+              "dataPath": ".rules['foo'].regex[0]",
+              "schemaPath": "#/definitions/regex/items/pattern",
+              "params": {
+                "pattern": "^/.+/[giu]*$"
+              },
+              "message": "should match pattern \\"^/.+/[giu]*$\\""
+            }
+          ]]
+        `);
 });
 
 test("should throw for invalid config having level at top", async () => {

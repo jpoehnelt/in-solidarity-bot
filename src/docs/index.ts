@@ -20,6 +20,7 @@ import { DEFAULT_RULES, Level } from "../rules";
 import fs from "fs";
 import handlebars from "handlebars";
 import path from "path";
+import { schema } from "../schema";
 
 /// Write individual rule pages
 const RULE_TEMPLATE = handlebars.compile(
@@ -55,5 +56,12 @@ fs.writeFileSync(
       };
     }),
   }),
+  "utf8"
+);
+
+/// Write schema
+fs.writeFileSync(
+  path.join(__dirname, `../../../docs/schema.json`),
+  JSON.stringify(schema, null, 2),
   "utf8"
 );
