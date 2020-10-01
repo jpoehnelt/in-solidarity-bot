@@ -1,5 +1,5 @@
 # Configuration
-The bot can be configured with a file located at `.github/in-solidarity.yml` in the target repo or at the same path in a repo named `.github` in the organization.  
+The bot can be configured with a file located at `.github/in-solidarity.yml` in the target repo or at the same path in a repo named `.github` within the organization. The JSON schema is located at [docs/schema.json](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/docs/schema.json).
 
 ```yaml
 rules:
@@ -7,13 +7,35 @@ rules:
     level: off
   slave:
     level: failure
+  foo:
+    regex:
+      - /foo/gi
+      - /foobar/gi
+    level: failure
 ignore:
  - ".github/in-solidarity.yml"  # default
  - "**/*.yml"
 ```
 The possible levels are `['off', 'notice', 'warning', 'failure']`. These correspond to [annotation_level in the GitHub API](https://docs.github.com/en/rest/reference/checks#create-a-check-run).
 
+The default configuration can be ignored with `ignoreDefaults: true` such as in the following.
+
+```yaml
+rules:
+  foo:
+    regex:
+      - /foo/gi
+      - /foobar/gi
+    level: failure
+ignoreDefaults: true
+```
+This will only check the single rule. 
+
+> **Note**: The merging of defaults uses array replacement. This means any array provided by the configuration will be used and default elements ignored.
+
 > **Note**: The bot uses the configuration from the default branch. Therefore any changes to the configuration in a pull request will not be used until merged.
+
+Read more about configuration for organizations at [Probot best practices](https://github.com/probot/probot/blob/master/docs/best-practices.md#store-configuration-in-the-repository).
 
 # Rules
 
@@ -21,12 +43,12 @@ The following are the current rules. Additional rules are welcome!
 
 | rule  | default level |
 |---|---|
-|[master](rules/master)  | `warning`  |
-|[slave](rules/slave)  | `warning`  |
-|[whitelist](rules/whitelist)  | `warning`  |
-|[blacklist](rules/blacklist)  | `warning`  |
-|[grandfathered](rules/grandfathered)  | `warning`  |
-|[sanity_check](rules/sanity_check)  | `warning`  |
-|[man_hours](rules/man_hours)  | `warning`  |
+|[master](rules/master.md)  | `warning`  |
+|[slave](rules/slave.md)  | `warning`  |
+|[whitelist](rules/whitelist.md)  | `warning`  |
+|[blacklist](rules/blacklist.md)  | `warning`  |
+|[grandfathered](rules/grandfathered.md)  | `warning`  |
+|[sanity_check](rules/sanity_check.md)  | `warning`  |
+|[man_hours](rules/man_hours.md)  | `warning`  |
 
 _This document is generated from a template using [rules.ts](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/src/rules.ts) and [docs/index.ts](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/docs/index.ts)._

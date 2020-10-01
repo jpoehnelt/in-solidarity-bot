@@ -14,17 +14,31 @@
  * limitations under the License.
  */
 
-import { DEFAULT_RULES, Rule } from "./rules";
+import { DEFAULT_RULES, Level, Rule } from "./rules";
+import { ajv, schema } from "./schema";
 
-import Ajv from "ajv";
 import { Context } from "probot";
-import { Level } from "./rules";
 import deepmerge from "deepmerge";
+import regexParser from "regex-parser";
 
 export interface Configuration {
   rules: { [key: string]: Rule };
   ignore: string[];
+  ignoreDefaults?: boolean;
 }
+
+export interface RepoRule {
+  regex?: (string | RegExp)[];
+  level?: Level;
+  alternatives?: string[];
+}
+
+export interface RepoConfiguration {
+  rules?: { [key: string]: RepoRule };
+  ignore?: string[];
+  ignoreDefaults?: boolean;
+}
+
 export class InvalidConfigError extends Error {}
 
 export const DEFAULT_CONFIGURATION: Configuration = {
@@ -34,49 +48,42 @@ export const DEFAULT_CONFIGURATION: Configuration = {
 
 const CONFIG_FILE = "in-solidarity.yml";
 
-const ajv = new Ajv({ allErrors: true });
-
-const rulesPropertiesSchema = Object.keys(DEFAULT_RULES).reduce((obj, k) => {
-  obj[k] = {
-    type: "object",
-    additionalProperties: false,
-    properties: {
-      level: { type: "string", enum: Object.values(Level) },
-    },
-  };
-  return obj;
-}, {});
-
-const schema = {
-  type: "object",
-  additionalProperties: false,
-  properties: {
-    rules: {
-      type: "object",
-      additionalProperties: false,
-      properties: rulesPropertiesSchema,
-    },
-    ignore: {
-      type: "array",
-      items: { type: "string" },
-    },
-  },
-};
-
 export const getConfig = async (context: Context): Promise<Configuration> => {
   const validate = ajv.compile(schema);
 
-  const repoConfig = await context.config(CONFIG_FILE);
+  const repoConfig = (await context.config(CONFIG_FILE)) as RepoConfiguration;
+
   if (repoConfig) {
     if (!validate(repoConfig)) {
       throw new InvalidConfigError(
-        "configuration is invalid: " + JSON.stringify(validate.errors)
+        "configuration is invalid: " + JSON.stringify(validate.errors, null, 2)
       );
     }
 
+    // parse all strings into regexp
+    for (const k in repoConfig.rules) {
+      if (repoConfig.rules[k].regex) {
+        repoConfig.rules[k].regex = repoConfig.rules[k].regex!.map(
+          (pattern) => {
+            try {
+              return regexParser(pattern as string);
+            } catch (e) {
+              throw new InvalidConfigError(
+                `configuration is invalid: unable to parse ${pattern} as regex`
+              );
+            }
+          }
+        );
+      }
+    }
+    if (repoConfig.ignoreDefaults) {
+      return { rules: {} as any, ignore: [], ...repoConfig };
+    }
     return deepmerge(DEFAULT_CONFIGURATION, repoConfig as Configuration, {
+      // overwrite from repo config
       arrayMerge: (_, b) => b,
     });
   }
+
   return DEFAULT_CONFIGURATION;
 };
