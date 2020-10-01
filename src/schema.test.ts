@@ -25,3 +25,5 @@ test("should validate", () => {
   }});
   expect(validate.errors).toBeFalsy();
 });
+
+// mosts tests are in config.test.ts
