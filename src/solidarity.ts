@@ -271,7 +271,7 @@ export class Solidarity {
   summary(
     message: string,
     v: string = version,
-    sha: string = process.env.sha || "unknown"
+    sha: string = process.env.SHA || "unknown"
   ): string {
     let config: Configuration | undefined = undefined;
 
