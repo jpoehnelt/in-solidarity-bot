@@ -1,12 +1,8 @@
 # How to become a contributor and submit your own code
 
-**Table of contents**
-
-* [Contributing a patch](#contributing-a-patch)
-* [Running the tests](#running-the-tests)
+> **Note**: Additional rules are welcome and can be added in [src/rules.ts](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/src/rules.ts).
 
 1.  Submit an issue describing your proposed change to the repo in question.
-1.  The repo owner will respond to your issue promptly.
 1.  Fork the desired repo, develop and test your code changes.
 1.  Ensure that your code adheres to the existing style in the code to which
     you are contributing.

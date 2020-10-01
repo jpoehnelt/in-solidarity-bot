@@ -39,9 +39,9 @@ Read more about configuration for organizations at [Probot best practices](https
 
 # Rules
 
-The following are the current rules. Additional rules are welcome!
+The following are the default rules.
 
-| rule  | default level |
+| rule  | level |
 |---|---|
 |[master](rules/master.md)  | `warning`  |
 |[slave](rules/slave.md)  | `warning`  |
@@ -51,4 +51,6 @@ The following are the current rules. Additional rules are welcome!
 |[sanity_check](rules/sanity_check.md)  | `warning`  |
 |[man_hours](rules/man_hours.md)  | `warning`  |
 
-_This document is generated from a template using [rules.ts](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/src/rules.ts) and [docs/index.ts](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/docs/index.ts)._
+> **Note**: Additional rules are welcome and can be added in [src/rules.ts](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/src/rules.ts).
+
+_This document is generated from a template using [src/rules.ts](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/src/rules.ts) and [docs/index.ts](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/docs/index.ts)._
