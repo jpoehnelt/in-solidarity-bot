@@ -45,10 +45,10 @@ This will only check the single rule specified here.
 ### Annotation Messages
 The annotation messages generated from the checks can be customized in two ways:
 
-1. Set the `message` attribute on the rule.
+1. Set the `message` property on the rule.
 1. Set the `defaultMessage` property at the root of the config.
 
-Priority is given to the `message` property on the rule. These attributes use handlebars for templates with the following context.
+Priority is given to the `message` property on the rule. These strings use handlebars for templates with the following context.
 
 * name
 * match
