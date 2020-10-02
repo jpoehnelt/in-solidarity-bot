@@ -10,12 +10,12 @@ branches:
 plugins:
   - "@semantic-release/commit-analyzer"
   - "@semantic-release/release-notes-generator"
+  - "@semantic-release/github"
+  - "@semantic-release/npm"
   - - "@semantic-release/git"
     - assets:
       - docs/**/*
       - package.json
       - package-lock.json
-  - "@semantic-release/github"
-  - "@semantic-release/npm"
 options:
   debug: true
