@@ -7,6 +7,10 @@ rules:
     level: off
   slave:
     level: failure
+    message: >
+      Please consider an alternative to ``. 
+      
+      See http://example.com/ for more information
   foo:
     regex:
       - /foo/gi
@@ -18,7 +22,14 @@ ignore:
 ```
 The possible levels are `['off', 'notice', 'warning', 'failure']`. These correspond to [annotation_level in the GitHub API](https://docs.github.com/en/rest/reference/checks#create-a-check-run).
 
-The default configuration can be ignored with `ignoreDefaults: true` such as in the following.
+> **Note**: The merging of defaults uses array replacement. This means any array provided by the configuration will be used and default elements ignored.
+
+> **Note**: The bot uses the configuration from the default branch. Therefore any changes to the configuration in a pull request will not be used until merged.
+
+> **Note**: Read more about configuration for organizations at [Probot best practices](https://github.com/probot/probot/blob/master/docs/best-practices.md#store-configuration-in-the-repository).
+
+### Ignoring Defaults
+The default rules can be ignored with `ignoreDefaults: true` such as in the following.
 
 ```yaml
 rules:
@@ -29,14 +40,33 @@ rules:
     level: failure
 ignoreDefaults: true
 ```
-This will only check the single rule. 
+This will only check the single rule specified here.
 
-> **Note**: The merging of defaults uses array replacement. This means any array provided by the configuration will be used and default elements ignored.
+### Annotation Messages
+The annotation messages generated from the checks can be customized in two ways:
 
-> **Note**: The bot uses the configuration from the default branch. Therefore any changes to the configuration in a pull request will not be used until merged.
+1. Set the `message` property on the rule.
+1. Set the `defaultMessage` property at the root of the config.
 
-Read more about configuration for organizations at [Probot best practices](https://github.com/probot/probot/blob/master/docs/best-practices.md#store-configuration-in-the-repository).
+Priority is given to the `message` property on the rule. These strings use handlebars for templates with the following context.
 
+* name
+* match
+* alternatives
+* content
+* regex
+
+The default message is:
+
+```
+
+Please consider an alternative to `{{match}}`. 
+{{#if alternatives~}}
+
+Possibilities include: {{#each alternatives}}{{#if @index}}, {{/if}}`{{this}}`{{/each}}
+{{~/if}}
+
+```
 # Rules
 
 The following are the default rules.

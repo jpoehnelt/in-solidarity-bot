@@ -148,6 +148,13 @@ test("should ignore defaults", async () => {
   const config = await getConfig(context);
   expect(config).toMatchInlineSnapshot(`
     Object {
+      "defaultMessage": "
+    Please consider an alternative to \`{{match}}\`. 
+    {{#if alternatives~}}
+
+    Possibilities include: {{#each alternatives}}{{#if @index}}, {{/if}}\`{{this}}\`{{/each}}
+    {{~/if}}
+    ",
       "ignore": Array [],
       "ignoreDefaults": true,
       "rules": Object {

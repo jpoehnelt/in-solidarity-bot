@@ -30,30 +30,36 @@ test("should ignore existing lines", () => {
 test("should annotate correctly", () => {
   const files = parse(fs.readFileSync("./fixtures/pull.failing.diff", "utf8"));
   const annotations = annotate(DEFAULT_CONFIGURATION, files);
-  expect(annotations).toEqual([
-    {
-      annotation_level: "warning",
-      end_column: 8,
-      end_line: 2,
-      message: "Please consider an alternative to `whitelist`.",
-      path: "README.md",
-      raw_details: "/white[_-]*list/gi",
-      start_column: 0,
-      start_line: 2,
-      title: "Match Found",
-    },
-    {
-      annotation_level: "warning",
-      end_column: 5,
-      end_line: 3,
-      message: "Please consider an alternative to `Master`.",
-      path: "README.md",
-      raw_details: "/master/gi",
-      start_column: 0,
-      start_line: 3,
-      title: "Match Found",
-    },
-  ]);
+  expect(annotations).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "annotation_level": "warning",
+        "end_column": 8,
+        "end_line": 2,
+        "message": "
+    Please consider an alternative to \`whitelist\`. 
+    ",
+        "path": "README.md",
+        "raw_details": "/white[_-]*list/gi",
+        "start_column": 0,
+        "start_line": 2,
+        "title": "Match Found",
+      },
+      Object {
+        "annotation_level": "warning",
+        "end_column": 5,
+        "end_line": 3,
+        "message": "
+    Please consider an alternative to \`Master\`. 
+    Possibilities include: \`primary\`, \`main\`, \`leader\`, \`active\`, \`writer\`",
+        "path": "README.md",
+        "raw_details": "/master/gi",
+        "start_column": 0,
+        "start_line": 3,
+        "title": "Match Found",
+      },
+    ]
+  `);
 });
 
 test("should annotate case without newPath", () => {

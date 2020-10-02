@@ -15,9 +15,17 @@
 rules:
   master:
     level: off
-  foo:
+  slave:
     level: failure
-    regex: ["/foo/gi"]
+    message: >
+      Please consider an alternative to `{{match}}`. 
+      
+      See http://example.com/{{name}} for more information
+  foo:
+    regex:
+      - /foo/gi
+      - /foobar/gi
+    level: failure
 ignore:
- - ".github/in-solidarity.yml"
+ - ".github/in-solidarity.yml"  # default
  - "**/*.yml"

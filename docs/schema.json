@@ -54,6 +54,9 @@
             },
             "regex": {
               "$ref": "#/definitions/regex"
+            },
+            "message": {
+              "type": "string"
             }
           }
         },
@@ -69,6 +72,9 @@
             },
             "regex": {
               "$ref": "#/definitions/regex"
+            },
+            "message": {
+              "type": "string"
             }
           }
         },
@@ -84,6 +90,9 @@
             },
             "regex": {
               "$ref": "#/definitions/regex"
+            },
+            "message": {
+              "type": "string"
             }
           }
         },
@@ -99,6 +108,9 @@
             },
             "regex": {
               "$ref": "#/definitions/regex"
+            },
+            "message": {
+              "type": "string"
             }
           }
         },
@@ -114,6 +126,9 @@
             },
             "regex": {
               "$ref": "#/definitions/regex"
+            },
+            "message": {
+              "type": "string"
             }
           }
         },
@@ -129,6 +144,9 @@
             },
             "regex": {
               "$ref": "#/definitions/regex"
+            },
+            "message": {
+              "type": "string"
             }
           }
         },
@@ -144,6 +162,9 @@
             },
             "regex": {
               "$ref": "#/definitions/regex"
+            },
+            "message": {
+              "type": "string"
             }
           }
         }
@@ -160,6 +181,9 @@
           },
           "regex": {
             "$ref": "#/definitions/regex"
+          },
+          "message": {
+            "type": "string"
           }
         },
         "required": [
@@ -167,6 +191,9 @@
           "regex"
         ]
       }
+    },
+    "defaultMessage": {
+      "type": "string"
     }
   },
   "if": {
@@ -197,6 +224,9 @@
             },
             "regex": {
               "$ref": "#/definitions/regex"
+            },
+            "message": {
+              "type": "string"
             }
           },
           "required": [

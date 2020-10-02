@@ -35,6 +35,7 @@ const alternatives = {
     minLength: 2,
   },
 };
+const message = { type: "string" };
 
 const defaultRule = {
   type: "object",
@@ -43,6 +44,7 @@ const defaultRule = {
     level: { $ref: "#/definitions/level" },
     alternatives: { $ref: "#/definitions/alternatives" },
     regex: { $ref: "#/definitions/regex" },
+    message,
   },
 };
 
@@ -74,6 +76,9 @@ export const schema = {
       type: "object",
       properties: defaultRules,
       additionalProperties: customRules,
+    },
+    defaultMessage: {
+      type: "string",
     },
   },
   if: {
