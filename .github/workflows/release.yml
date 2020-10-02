@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          persist-credentials: false
+          token: ${{ secrets.RELEASE_TOKEN }}
       - run: npm i
       - run: npm run build
       - run: npm run lint
@@ -39,5 +39,5 @@ jobs:
             "@semantic-release/github"
             "@semantic-release/npm"
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_WOMBAT_TOKEN }}
