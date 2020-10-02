@@ -26,6 +26,7 @@ jobs:
           token: ${{ secrets.RELEASE_TOKEN }}
       - run: npm i
       - run: npm run build
+      - run: npm run docs
       - run: npm run lint
       - run: npm test
       - run: docker build . --file Dockerfile
