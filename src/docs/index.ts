@@ -15,7 +15,12 @@
  * limitations under the License.
  */
 
-import { DEFAULT_RULES, Level } from "../rules";
+import {
+  DEFAULT_MESSAGE,
+  DEFAULT_RULES,
+  Level,
+  MessageContext,
+} from "../rules";
 
 import fs from "fs";
 import handlebars from "handlebars";
@@ -42,6 +47,16 @@ for (const k in DEFAULT_RULES) {
 }
 
 /// Write rule index page
+
+type KeysEnum<T> = { [P in keyof Required<T>]: true };
+const MessageContextKeys: KeysEnum<MessageContext> = {
+  name: true,
+  match: true,
+  alternatives: true,
+  content: true,
+  regex: true,
+};
+
 const README_TEMPLATE = handlebars.compile(
   fs.readFileSync(path.join(__dirname, "../templates/README.hbs"), "utf8")
 );
@@ -49,6 +64,8 @@ const README_TEMPLATE = handlebars.compile(
 fs.writeFileSync(
   path.join(__dirname, `../../../docs/README.md`),
   README_TEMPLATE({
+    messageContextKeys: Object.keys(MessageContextKeys),
+    DEFAULT_MESSAGE,
     rules: Object.keys(DEFAULT_RULES).map((k) => {
       return {
         rule: k,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { DEFAULT_RULES, Level, Rule } from "./rules";
+import { DEFAULT_MESSAGE, DEFAULT_RULES, Level, Rule } from "./rules";
 import { ajv, schema } from "./schema";
 
 import { Context } from "probot";
@@ -24,6 +24,7 @@ import regexParser from "regex-parser";
 export interface Configuration {
   rules: { [key: string]: Rule };
   ignore: string[];
+  defaultMessage: string;
   ignoreDefaults?: boolean;
 }
 
@@ -31,12 +32,14 @@ export interface RepoRule {
   regex?: (string | RegExp)[];
   level?: Level;
   alternatives?: string[];
+  message?: string;
 }
 
 export interface RepoConfiguration {
   rules?: { [key: string]: RepoRule };
   ignore?: string[];
   ignoreDefaults?: boolean;
+  defaultMessage?: string;
 }
 
 export class InvalidConfigError extends Error {}
@@ -44,6 +47,7 @@ export class InvalidConfigError extends Error {}
 export const DEFAULT_CONFIGURATION: Configuration = {
   rules: DEFAULT_RULES,
   ignore: [".github/in-solidarity.yml"],
+  defaultMessage: DEFAULT_MESSAGE,
 };
 
 const CONFIG_FILE = "in-solidarity.yml";
@@ -77,7 +81,12 @@ export const getConfig = async (context: Context): Promise<Configuration> => {
       }
     }
     if (repoConfig.ignoreDefaults) {
-      return { rules: {} as any, ignore: [], ...repoConfig };
+      return {
+        defaultMessage: DEFAULT_MESSAGE,
+        rules: {} as any,
+        ignore: [],
+        ...repoConfig,
+      };
     }
     return deepmerge(DEFAULT_CONFIGURATION, repoConfig as Configuration, {
       // overwrite from repo config

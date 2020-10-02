@@ -18,7 +18,23 @@ export interface Rule {
   regex: (string | RegExp)[];
   level: Level;
   alternatives?: string[];
+  message?: string;
 }
+export interface MessageContext {
+  name: string;
+  regex: string[];
+  match: string;
+  content: string;
+  alternatives?: string[];
+}
+
+export const DEFAULT_MESSAGE = `
+Please consider an alternative to \`{{match}}\`. 
+{{#if alternatives~}}
+
+Possibilities include: {{#each alternatives}}{{#if @index}}, {{/if}}\`{{this}}\`{{/each}}
+{{~/if}}
+`;
 
 export enum Level {
   OFF = "off",

@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { DEFAULT_MESSAGE, Level, MessageContext } from "./rules";
+
 import { Configuration } from "./config";
 import { File } from "gitdiff-parser";
-import { Level } from "./rules";
+import handlebars from "handlebars";
 import minimatch from "minimatch";
 
 export type ChecksUpdateParamsOutputAnnotations = {
@@ -53,12 +55,21 @@ export const annotate = (
             for (const pattern of config.rules[k].regex) {
               // @ts-ignore matchAll may not be available
               for (const match of change.content.matchAll(pattern)) {
+                const context: MessageContext = {
+                  name: k,
+                  match: match[0],
+                  regex: config.rules[k].regex.map((r) => r.toString()),
+                  content: change.content,
+                  alternatives: config.rules[k].alternatives || [],
+                };
                 annotations.push({
                   annotation_level: "warning",
                   end_column: match.index + match[0].length - 1,
                   end_line: (change.lineNumber ||
                     change.newLineNumber) as number,
-                  message: `Please consider an alternative to \`${match[0]}\`.`,
+                  message: handlebars.compile(
+                    config.rules[k].message || config.defaultMessage
+                  )(context),
                   path: f.newPath,
                   raw_details: pattern.toString(),
                   start_column: match.index,
