@@ -35,7 +35,7 @@ export type ChecksUpdateParamsOutputAnnotations = {
 
 export const annotate = (
   config: Configuration,
-  files: File[],
+  files: File[]
 ): ChecksUpdateParamsOutputAnnotations[] => {
   const annotations: ChecksUpdateParamsOutputAnnotations[] = [];
 
@@ -54,8 +54,8 @@ export const annotate = (
         if (change.isInsert) {
           for (const k in config.rules) {
             for (const pattern of config.rules[k].regex) {
-              if (config.rules[k].level == 'off') {
-                continue
+              if (config.rules[k].level == "off") {
+                continue;
               }
 
               // @ts-ignore matchAll may not be available
@@ -69,7 +69,10 @@ export const annotate = (
                 };
 
                 const annotation = {
-                  annotation_level: config.rules[k].level as "notice" | "warning" | "failure",
+                  annotation_level: config.rules[k].level as
+                    | "notice"
+                    | "warning"
+                    | "failure",
                   end_column: match.index + match[0].length - 1,
                   end_line: (change.lineNumber ||
                     change.newLineNumber) as number,
