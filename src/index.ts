@@ -31,7 +31,7 @@ module.exports = async (app: Application) => {
   );
 
   async function run(context: Context) {
-    const solidarity = new Solidarity(context, context.log);
+    const solidarity = new Solidarity(context);
     await solidarity.run();
   }
 };
