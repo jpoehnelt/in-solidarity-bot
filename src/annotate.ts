@@ -1,3 +1,4 @@
+import { Context, Logger } from "probot";
 /**
  * Copyright 2020 Google LLC
  *
@@ -53,6 +54,10 @@ export const annotate = (
         if (change.isInsert) {
           for (const k in config.rules) {
             for (const pattern of config.rules[k].regex) {
+              if (config.rules[k].level == "off") {
+                continue;
+              }
+
               // @ts-ignore matchAll may not be available
               for (const match of change.content.matchAll(pattern)) {
                 const context: MessageContext = {
@@ -62,8 +67,12 @@ export const annotate = (
                   content: change.content,
                   alternatives: config.rules[k].alternatives || [],
                 };
-                annotations.push({
-                  annotation_level: "warning",
+
+                const annotation = {
+                  annotation_level: config.rules[k].level as
+                    | "notice"
+                    | "warning"
+                    | "failure",
                   end_column: match.index + match[0].length - 1,
                   end_line: (change.lineNumber ||
                     change.newLineNumber) as number,
@@ -76,7 +85,9 @@ export const annotate = (
                   start_line: (change.lineNumber ||
                     change.newLineNumber) as number,
                   title: "Match Found",
-                });
+                };
+
+                annotations.push(annotation);
               }
             }
           }
