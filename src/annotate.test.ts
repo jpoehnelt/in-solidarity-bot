@@ -91,3 +91,40 @@ test("should get correct level from annotations", () => {
     ] as any)
   ).toBe(Level.FAILURE);
 });
+
+test("should annotate with correct level", () => {
+  const files = parse(fs.readFileSync("./fixtures/pull.failing.diff", "utf8"));
+  const annotations = annotate(
+    {
+      ...DEFAULT_CONFIGURATION,
+      rules: {
+        whitelist: {
+          regex: DEFAULT_CONFIGURATION.rules.whitelist.regex,
+          level: Level.FAILURE,
+        },
+        master: {
+          regex: DEFAULT_CONFIGURATION.rules.master.regex,
+          level: Level.OFF,
+        },
+      },
+    },
+    files
+  );
+  expect(annotations).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "annotation_level": "failure",
+        "end_column": 8,
+        "end_line": 2,
+        "message": "
+    Please consider an alternative to \`whitelist\`. 
+    ",
+        "path": "README.md",
+        "raw_details": "/white[_-]*list/gi",
+        "start_column": 0,
+        "start_line": 2,
+        "title": "Match Found",
+      },
+    ]
+  `);
+});
