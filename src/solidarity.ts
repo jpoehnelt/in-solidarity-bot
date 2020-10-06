@@ -20,8 +20,8 @@ import {
   getLevelFromAnnotations,
 } from "./annotate";
 import { Configuration, InvalidConfigError, getConfig } from "./config";
-import { Context, Logger } from "probot";
 
+import { Context } from "probot";
 import { File } from "gitdiff-parser";
 import { Level } from "./rules";
 import { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
@@ -29,6 +29,7 @@ import fs from "fs";
 import handlebars from "handlebars";
 import { parse } from "./parse";
 import path from "path";
+import pino from "pino";
 import { safeDump } from "js-yaml";
 import { version } from "../package.json";
 
@@ -64,15 +65,23 @@ export enum OutputTitle {
   WARNING = "Check completed with warnings",
 }
 
+export const logger = pino();
+
 export class Solidarity {
   private context: Context;
-  private logger: Logger;
+  private logger: pino.Logger;
   private checkId?: number;
   config?: Configuration;
 
-  constructor(context: Context, logger: Logger) {
+  constructor(context: Context) {
     this.context = context;
-    this.logger = logger;
+    this.logger = logger.child({
+      version,
+      repo: this.repo,
+      owner: this.owner,
+      pull_number: this.pullNumber,
+      sha: this.headSha,
+    });
   }
 
   get headSha(): string {
@@ -109,7 +118,7 @@ export class Solidarity {
 
     try {
       this.config = await getConfig(this.context);
-      this.logger.info(this.config, "Loaded config");
+      this.logger.info({ config: this.config }, "Loaded config");
     } catch (e) {
       if (e instanceof InvalidConfigError) {
         conclusion = Conclusion.FAILURE;
@@ -125,10 +134,7 @@ export class Solidarity {
         };
       }
 
-      this.logger.error(
-        { labels: { ...this.checkOptions, version }, err: e },
-        output.summary
-      );
+      this.logger.error({ err: e }, output.summary);
 
       await this.update("completed", conclusion, output);
       return;
@@ -147,10 +153,7 @@ export class Solidarity {
           ),
         };
 
-        this.logger.info(
-          { labels: { ...this.checkOptions, version } },
-          "Failed to check private repository"
-        );
+        this.logger.info({}, "Failed to check private repository");
       } else {
         output = {
           title: OutputTitle.ERROR,
@@ -159,12 +162,8 @@ export class Solidarity {
 
         this.logger.error(
           {
-            labels: {
-              ...this.checkOptions,
-              version,
-              config: this.config,
-              payload: this.context.payload,
-            },
+            config: this.config,
+            payload: this.context.payload,
             err: e,
           },
           "Failed to complete check"
@@ -259,10 +258,6 @@ export class Solidarity {
 
     this.logger.info({
       conclusion,
-      repo: this.repo,
-      owner: this.owner,
-      pull_number: this.pullNumber,
-      sha: this.headSha,
     });
 
     return { conclusion, output };
