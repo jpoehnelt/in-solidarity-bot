@@ -58,11 +58,35 @@ test("solidarity should run check on failing diff", async () => {
   expect(conclusion).toBe(Conclusion.NEUTRAL);
   expect(output.title).toEqual(OutputTitle.WARNING);
   expect(output.annotations?.length).toEqual(2);
-  expect(info.mock.calls[0]).toMatchInlineSnapshot(`
+  expect(info.mock.calls).toMatchInlineSnapshot(`
     Array [
-      Object {
-        "conclusion": "neutral",
-      },
+      Array [
+        Object {
+          "column": 0,
+          "content": "whitelist",
+          "level": "warning",
+          "line": 2,
+          "path": "README.md",
+          "regex": "/white[_-]*list/gi",
+        },
+        "match",
+      ],
+      Array [
+        Object {
+          "column": 0,
+          "content": "Master",
+          "level": "warning",
+          "line": 3,
+          "path": "README.md",
+          "regex": "/master/gi",
+        },
+        "match",
+      ],
+      Array [
+        Object {
+          "conclusion": "neutral",
+        },
+      ],
     ]
   `);
 });

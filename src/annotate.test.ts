@@ -23,13 +23,17 @@ import { parse } from "./parse";
 
 test("should ignore existing lines", () => {
   const files = parse(fs.readFileSync("./fixtures/pull.normal.diff", "utf8"));
-  const annotations = annotate(DEFAULT_CONFIGURATION, files);
+  const annotations = annotate(DEFAULT_CONFIGURATION, files, {
+    info: jest.fn(),
+  } as any);
   expect(annotations).toEqual([]);
 });
 
 test("should annotate correctly", () => {
   const files = parse(fs.readFileSync("./fixtures/pull.failing.diff", "utf8"));
-  const annotations = annotate(DEFAULT_CONFIGURATION, files);
+  const annotations = annotate(DEFAULT_CONFIGURATION, files, {
+    info: jest.fn(),
+  } as any);
   expect(annotations).toMatchInlineSnapshot(`
     Array [
       Object {
@@ -76,7 +80,11 @@ test("should annotate case without newPath", () => {
     },
   ];
 
-  const annotations = annotate(DEFAULT_CONFIGURATION, files as any);
+  const annotations = annotate(
+    DEFAULT_CONFIGURATION,
+    files as any,
+    { info: jest.fn() } as any
+  );
   expect(annotations).toEqual([]);
 });
 
@@ -108,7 +116,8 @@ test("should annotate with correct level", () => {
         },
       },
     },
-    files
+    files,
+    { info: jest.fn() } as any
   );
   expect(annotations).toMatchInlineSnapshot(`
     Array [

@@ -1,4 +1,3 @@
-import { Context, Logger } from "probot";
 /**
  * Copyright 2020 Google LLC
  *
@@ -14,12 +13,13 @@ import { Context, Logger } from "probot";
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { DEFAULT_MESSAGE, Level, MessageContext } from "./rules";
+import { Level, MessageContext } from "./rules";
 
 import { Configuration } from "./config";
 import { File } from "gitdiff-parser";
 import handlebars from "handlebars";
 import minimatch from "minimatch";
+import pino from "pino";
 
 export type ChecksUpdateParamsOutputAnnotations = {
   path: string;
@@ -35,7 +35,8 @@ export type ChecksUpdateParamsOutputAnnotations = {
 
 export const annotate = (
   config: Configuration,
-  files: File[]
+  files: File[],
+  logger: pino.Logger
 ): ChecksUpdateParamsOutputAnnotations[] => {
   const annotations: ChecksUpdateParamsOutputAnnotations[] = [];
 
@@ -86,6 +87,18 @@ export const annotate = (
                     change.newLineNumber) as number,
                   title: "Match Found",
                 };
+
+                logger.info(
+                  {
+                    path: annotation.path,
+                    line: annotation.start_line,
+                    column: annotation.start_column,
+                    content: change.content,
+                    regex: pattern.toString(),
+                    level: annotation.annotation_level,
+                  },
+                  "match"
+                );
 
                 annotations.push(annotation);
               }

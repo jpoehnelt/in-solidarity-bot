@@ -233,7 +233,11 @@ export class Solidarity {
     };
     const diff = await this.diff();
 
-    output.annotations = annotate(this.config as Configuration, diff);
+    output.annotations = annotate(
+      this.config as Configuration,
+      diff,
+      this.logger
+    );
 
     const level = getLevelFromAnnotations(output.annotations);
 
