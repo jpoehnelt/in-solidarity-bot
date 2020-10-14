@@ -9,7 +9,7 @@
 [![npm](https://img.shields.io/npm/v/in-solidarity-bot)](https://www.npmjs.com/package/in-solidarity-bot)
 [![](./static//badge-flat.png)](https://github.com/apps/in-solidarity)
 
-> A GitHub Bot built with [Probot](https://github.com/probot/probot) that checks for inclusive language. See [help](./static/HELP.md) for more information.
+> A GitHub Bot built with [Probot](https://github.com/probot/probot) that checks for inclusive language. See [our documentation](./docs/README.md) for more information.
 
 ![](./static/screenshot.png)
 
