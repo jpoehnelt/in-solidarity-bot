@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
+import * as nock from "nock";
+
 import { Conclusion, OutputTitle, Solidarity, logger } from "./solidarity";
 
 import { DEFAULT_CONFIGURATION } from "./config";
 import fs from "fs";
 import { parse } from "./parse";
 import { version } from "../package.json";
+
+nock.disableNetConnect();
 
 const payload = JSON.parse(fs.readFileSync("./fixtures/payload.json", "utf8"));
 const failingDIff = parse(
@@ -109,4 +113,39 @@ test("solidarity should generate correct summary", async () => {
   const s = new Solidarity({ name: "foo", id: "bar", payload: payload } as any);
   s.config = DEFAULT_CONFIGURATION;
   expect(s.summary("foo", "1.0.0")).toMatchSnapshot();
+});
+
+test("update should chunk annotations", async () => {
+  const s = new Solidarity({ name: "foo", id: "bar", payload: payload } as any);
+  s.config = DEFAULT_CONFIGURATION;
+  const status = "completed";
+  const conclusion = Conclusion.FAILURE;
+
+  const update = jest.fn();
+  s["context"].github = {
+    checks: {
+      update: update as any,
+    } as any,
+  } as any;
+
+  const output = {
+    title: "title",
+    summary: "summary",
+    annotations: Array.from({ length: 101 }, () => {
+      return {
+        annotation_level: "warning" as const,
+        path: "path",
+        start_line: 0,
+        end_line: 1,
+        message: "message",
+      };
+    }),
+  };
+
+  await s.update(status, conclusion, output);
+
+  expect(update).toBeCalledTimes(3);
+  expect(update.mock.calls[0][0].output.annotations.length).toBe(50);
+  expect(update.mock.calls[1][0].output.annotations.length).toBe(50);
+  expect(update.mock.calls[2][0].output.annotations.length).toBe(1);
 });

@@ -189,21 +189,33 @@ export class Solidarity {
   async update(
     status: "queued" | "in_progress" | "completed",
     conclusion?: Conclusion,
-    output?: ChecksUpdateParamsOutput,
-    details_url?: string
+    output?: ChecksUpdateParamsOutput
   ): Promise<void> {
     try {
-      await this.context.github.checks.update({
+      const request = {
         ...this.checkOptions,
         check_run_id: this.checkId as number,
         status,
         conclusion,
         ...(status === "completed" && {
           completed_at: new Date().toISOString(),
+          ...(output && { output }),
         }),
-        ...(output && { output }),
-        details_url,
-      });
+      };
+
+      // There is a limit of 50 annotations per request
+      if (output && output.annotations && output.annotations.length > 50) {
+        await Promise.all(
+          chunk(output.annotations, 50).map((annotations) => {
+            return this.context.github.checks.update({
+              ...request,
+              output: { ...output, annotations },
+            });
+          })
+        );
+      } else {
+        await this.context.github.checks.update(request);
+      }
     } catch (e) {
       this.logger.error({ err: e }, "Failed to update check");
     }
@@ -294,3 +306,13 @@ export class Solidarity {
     });
   }
 }
+
+const chunk = <T>(arr: Array<T>, chunkSize: number): Array<Array<T>> => {
+  return arr.reduce(
+    (previous: any, _: any, index: number, array: Array<T>) =>
+      !(index % chunkSize)
+        ? previous.concat([array.slice(index, index + chunkSize)])
+        : previous,
+    []
+  );
+};
