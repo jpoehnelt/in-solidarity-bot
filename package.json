@@ -42,7 +42,7 @@
     "regex-parser": "^2.2.11"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@rollup/plugin-node-resolve": "^10.0.0",
     "@types/jest": "^26.0.14",
     "@types/js-yaml": "^3.12.5",
     "@types/nock": "^11.1.0",
