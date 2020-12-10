@@ -42,7 +42,7 @@ test("should annotate correctly", () => {
         "end_line": 2,
         "message": "
     Please consider an alternative to \`whitelist\`. 
-    ",
+    Possibilities include: \`include list\`, \`allow list\`",
         "path": "README.md",
         "raw_details": "/white[_-]*list/gi",
         "start_column": 0,
@@ -127,7 +127,7 @@ test("should annotate with correct level", () => {
         "end_line": 2,
         "message": "
     Please consider an alternative to \`whitelist\`. 
-    ",
+    Possibilities include: \`include list\`, \`allow list\`",
         "path": "README.md",
         "raw_details": "/white[_-]*list/gi",
         "start_column": 0,
