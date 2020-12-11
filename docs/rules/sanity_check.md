@@ -5,6 +5,9 @@ This rule uses the following patterns:
 
 It has a default check level of: `warning`
 
+## Alternatives
+* `smoke test`
+* `confidence check`
 
 ## Configuration
 

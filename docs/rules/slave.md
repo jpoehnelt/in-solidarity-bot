@@ -5,6 +5,12 @@ This rule uses the following patterns:
 
 It has a default check level of: `warning`
 
+## Alternatives
+* `secondary`
+* `node`
+* `worker`
+* `replica`
+* `passive`
 
 ## Configuration
 

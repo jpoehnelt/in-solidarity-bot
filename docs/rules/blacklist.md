@@ -5,6 +5,9 @@ This rule uses the following patterns:
 
 It has a default check level of: `warning`
 
+## Alternatives
+* `exclude list`
+* `deny list`
 
 ## Configuration
 
