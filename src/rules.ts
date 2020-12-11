@@ -52,25 +52,31 @@ export const DEFAULT_RULES: { [key: string]: Rule } = {
   slave: {
     regex: [/slave/gi],
     level: Level.WARNING,
+    alternatives: ["secondary", "node", "worker", "replica", "passive"],
   },
   whitelist: {
     regex: [/white[_-]*list/gi],
     level: Level.WARNING,
+    alternatives: ["include list", "allow list"],
   },
   blacklist: {
     regex: [/black[_-]*list/gi],
     level: Level.WARNING,
+    alternatives: ["exclude list", "deny list"],
   },
   grandfathered: {
     regex: [/grandfathered/gi],
     level: Level.WARNING,
+    alternatives: ["legacied", "exempted"],
   },
   sanity_check: {
     regex: [/sanity[_-]*check/gi],
     level: Level.WARNING,
+    alternatives: ["smoke test", "confidence check"],
   },
   man_hours: {
     regex: [/man[_-]*hours/gi],
     level: Level.WARNING,
+    alternatives: ["person-hours", "human-hours"],
   },
 };
