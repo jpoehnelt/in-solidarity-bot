@@ -61,16 +61,44 @@ test("solidarity should run check on failing diff", async () => {
   const { conclusion, output } = await s.check();
   expect(conclusion).toBe(Conclusion.NEUTRAL);
   expect(output.title).toEqual(OutputTitle.WARNING);
-  expect(output.annotations?.length).toEqual(2);
+  expect(output.annotations?.length).toEqual(4);
   expect(info.mock.calls).toMatchInlineSnapshot(`
     Array [
       Array [
         Object {
           "column": 0,
-          "content": "whitelist",
+          "content": "whitelist
+    ",
           "level": "warning",
           "line": 2,
-          "path": "README.md",
+          "path": "README.md
+    ",
+          "regex": "/white[_-]*list/gi",
+        },
+        "match",
+      ],
+      Array [
+        Object {
+          "column": 0,
+          "content": "Master
+    ",
+          "level": "warning",
+          "line": 3,
+          "path": "README.md
+    ",
+          "regex": "/master/gi",
+        },
+        "match",
+      ],
+      Array [
+        Object {
+          "column": 0,
+          "content": "whitelist
+    ",
+          "level": "warning",
+          "line": 2,
+          "path": ".github/in-solidarity.yml
+    ",
           "regex": "/white[_-]*list/gi",
         },
         "match",
@@ -81,7 +109,8 @@ test("solidarity should run check on failing diff", async () => {
           "content": "Master",
           "level": "warning",
           "line": 3,
-          "path": "README.md",
+          "path": ".github/in-solidarity.yml
+    ",
           "regex": "/master/gi",
         },
         "match",
