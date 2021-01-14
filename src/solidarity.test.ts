@@ -149,3 +149,13 @@ test("update should chunk annotations", async () => {
   expect(update.mock.calls[1][0].output.annotations.length).toBe(50);
   expect(update.mock.calls[2][0].output.annotations.length).toBe(1);
 });
+
+test("solidarity blocks some orgs", async () => {
+  const env = process.env;
+  const s = new Solidarity({ name: "foo", id: "bar", payload: payload } as any);
+  s.config = DEFAULT_CONFIGURATION;
+  expect(s.isBlockedOwner()).toBeFalsy();
+  process.env.BLOCKED_ORGS = "jpoehnelt,baz";
+  expect(s.isBlockedOwner()).toBeTruthy();
+  process.env = env;
+});

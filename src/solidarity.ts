@@ -109,11 +109,23 @@ export class Solidarity {
     };
   }
 
+  isBlockedOwner(): boolean {
+    return (process.env.BLOCKED_ORGS || "")
+      .toLowerCase()
+      .split(",")
+      .includes(this.owner.toLocaleLowerCase());
+  }
+
   async run(): Promise<void> {
     let conclusion: Conclusion = Conclusion.NEUTRAL;
     let output: { title: string; summary: string };
 
     await this.start();
+
+    if (this.isBlockedOwner()) {
+      return this.update("completed", Conclusion.CANCELLED);
+    }
+
     await this.update("in_progress");
 
     try {
