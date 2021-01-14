@@ -155,9 +155,7 @@ test("solidarity blocks some orgs", async () => {
   const s = new Solidarity({ name: "foo", id: "bar", payload: payload } as any);
   s.config = DEFAULT_CONFIGURATION;
   expect(s.isBlockedOwner()).toBeFalsy();
-  process.env.BLOCKED_ORGS = 'jpoehnelt,baz';
+  process.env.BLOCKED_ORGS = "jpoehnelt,baz";
   expect(s.isBlockedOwner()).toBeTruthy();
   process.env = env;
 });
-
-
