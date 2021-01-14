@@ -176,7 +176,7 @@ export class Solidarity {
 
   async start(): Promise<void> {
     try {
-      const response = await this.context.github.checks.create({
+      const response = await this.context.octokit.checks.create({
         ...this.checkOptions,
         status: "queued",
       });
@@ -207,14 +207,14 @@ export class Solidarity {
       if (output && output.annotations && output.annotations.length > 50) {
         await Promise.all(
           chunk(output.annotations, 50).map((annotations) => {
-            return this.context.github.checks.update({
+            return this.context.octokit.checks.update({
               ...request,
               output: { ...output, annotations },
             });
           })
         );
       } else {
-        await this.context.github.checks.update(request);
+        await this.context.octokit.checks.update(request);
       }
     } catch (e) {
       this.logger.error({ err: e }, "Failed to update check");
@@ -222,7 +222,7 @@ export class Solidarity {
   }
 
   async diff(): Promise<File[]> {
-    const response = await this.context.github.pulls.get({
+    const response = await this.context.octokit.pulls.get({
       owner: this.owner,
       repo: this.repo,
       pull_number: this.pullNumber,

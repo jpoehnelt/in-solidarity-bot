@@ -74,7 +74,7 @@ export const annotate = (
                     | "notice"
                     | "warning"
                     | "failure",
-                  end_column: match.index + match[0].length - 1,
+                  end_column: match.index! + match[0].length - 1,
                   end_line: (change.lineNumber ||
                     change.newLineNumber) as number,
                   message: handlebars.compile(

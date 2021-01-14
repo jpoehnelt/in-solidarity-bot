@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import { Application, Context } from "probot";
-
+import { Context, Probot } from "probot";
 import { Solidarity } from "./solidarity";
 
-module.exports = async (app: Application) => {
+module.exports = async (app: Probot) => {
   app.on(
     [
       "pull_request.opened",
