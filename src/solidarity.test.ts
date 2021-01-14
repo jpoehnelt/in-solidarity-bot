@@ -122,7 +122,7 @@ test("update should chunk annotations", async () => {
   const conclusion = Conclusion.FAILURE;
 
   const update = jest.fn();
-  s["context"].github = {
+  s["context"].octokit = {
     checks: {
       update: update as any,
     } as any,
