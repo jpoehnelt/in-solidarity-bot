@@ -22,7 +22,7 @@ import yaml from "js-yaml";
 
 const fakeContext = ({
   config: async () =>
-    yaml.safeLoad(fs.readFileSync("./fixtures/in-solidarity.yml", "utf8")),
+    yaml.load(fs.readFileSync("./fixtures/in-solidarity.yml", "utf8")),
 } as unknown) as Context;
 
 test("should override default rules", async () => {

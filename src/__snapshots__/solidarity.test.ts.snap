@@ -30,14 +30,14 @@ rules:
       - passive
   whitelist:
     regex:
-      - '/white[_-]*list/gi'
+      - /white[_-]*list/gi
     level: warning
     alternatives:
       - include list
       - allow list
   blacklist:
     regex:
-      - '/black[_-]*list/gi'
+      - /black[_-]*list/gi
     level: warning
     alternatives:
       - exclude list
@@ -51,14 +51,14 @@ rules:
       - exempted
   sanity_check:
     regex:
-      - '/sanity[_-]*check/gi'
+      - /sanity[_-]*check/gi
     level: warning
     alternatives:
       - smoke test
       - confidence check
   man_hours:
     regex:
-      - '/man[_-]*hours/gi'
+      - /man[_-]*hours/gi
     level: warning
     alternatives:
       - person-hours
