@@ -82,22 +82,22 @@ test("should throw for invalid regex pattern", async () => {
   await expect(getConfig(context)).rejects.toMatchInlineSnapshot(`
           [Error: configuration is invalid: [
             {
-              "keyword": "required",
-              "dataPath": "/rules/foo",
+              "instancePath": "/rules/foo",
               "schemaPath": "#/properties/rules/additionalProperties/required",
+              "keyword": "required",
               "params": {
                 "missingProperty": "level"
               },
-              "message": "should have required property 'level'"
+              "message": "must have required property 'level'"
             },
             {
-              "keyword": "pattern",
-              "dataPath": "/rules/foo/regex/0",
+              "instancePath": "/rules/foo/regex/0",
               "schemaPath": "#/definitions/regex/items/pattern",
+              "keyword": "pattern",
               "params": {
                 "pattern": "^/.+/[giu]*$"
               },
-              "message": "should match pattern \\"^/.+/[giu]*$\\""
+              "message": "must match pattern \\"^/.+/[giu]*$\\""
             }
           ]]
         `);
@@ -119,13 +119,13 @@ test("should throw for empty regex array", async () => {
   await expect(getConfig(context)).rejects.toMatchInlineSnapshot(`
           [Error: configuration is invalid: [
             {
-              "keyword": "minItems",
-              "dataPath": "/rules/foo/regex",
+              "instancePath": "/rules/foo/regex",
               "schemaPath": "#/definitions/regex/minItems",
+              "keyword": "minItems",
               "params": {
                 "limit": 1
               },
-              "message": "should NOT have fewer than 1 items"
+              "message": "must NOT have fewer than 1 items"
             }
           ]]
         `);
@@ -180,22 +180,22 @@ test("should throw if ignoring defaults without rules", async () => {
   await expect(getConfig(context)).rejects.toMatchInlineSnapshot(`
           [Error: configuration is invalid: [
             {
-              "keyword": "required",
-              "dataPath": "",
+              "instancePath": "",
               "schemaPath": "#/then/required",
+              "keyword": "required",
               "params": {
                 "missingProperty": "rules"
               },
-              "message": "should have required property 'rules'"
+              "message": "must have required property 'rules'"
             },
             {
-              "keyword": "if",
-              "dataPath": "",
+              "instancePath": "",
               "schemaPath": "#/if",
+              "keyword": "if",
               "params": {
                 "failingKeyword": "then"
               },
-              "message": "should match \\"then\\" schema"
+              "message": "must match \\"then\\" schema"
             }
           ]]
         `);
@@ -217,13 +217,13 @@ test("should throw for invalid flags", async () => {
   await expect(getConfig(context)).rejects.toMatchInlineSnapshot(`
           [Error: configuration is invalid: [
             {
-              "keyword": "pattern",
-              "dataPath": "/rules/foo/regex/0",
+              "instancePath": "/rules/foo/regex/0",
               "schemaPath": "#/definitions/regex/items/pattern",
+              "keyword": "pattern",
               "params": {
                 "pattern": "^/.+/[giu]*$"
               },
-              "message": "should match pattern \\"^/.+/[giu]*$\\""
+              "message": "must match pattern \\"^/.+/[giu]*$\\""
             }
           ]]
         `);
