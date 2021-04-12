@@ -25,12 +25,12 @@ import { Context } from "probot";
 import { File } from "gitdiff-parser";
 import { Level } from "./rules";
 import { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
+import { dump } from "js-yaml";
 import fs from "fs";
 import handlebars from "handlebars";
 import { parse } from "./parse";
 import path from "path";
 import pino from "pino";
-import { safeDump } from "js-yaml";
 import { version } from "../package.json";
 
 type ChecksCreateParams = RestEndpointMethodTypes["checks"]["create"]["parameters"];
@@ -314,7 +314,7 @@ export class Solidarity {
       message,
       sha,
       version: v,
-      config: config ? safeDump(config) : null,
+      config: config ? dump(config) : null,
     });
   }
 }
