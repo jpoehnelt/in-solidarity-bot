@@ -66,7 +66,7 @@ export const schema = {
   properties: {
     ignore: {
       type: "array",
-      minitems: 1,
+      minItems: 1,
       items: { type: "string" },
     },
     ignoreDefaults: {
