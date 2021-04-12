@@ -83,7 +83,7 @@ test("should throw for invalid regex pattern", async () => {
           [Error: configuration is invalid: [
             {
               "keyword": "required",
-              "dataPath": ".rules['foo']",
+              "dataPath": "/rules/foo",
               "schemaPath": "#/properties/rules/additionalProperties/required",
               "params": {
                 "missingProperty": "level"
@@ -92,7 +92,7 @@ test("should throw for invalid regex pattern", async () => {
             },
             {
               "keyword": "pattern",
-              "dataPath": ".rules['foo'].regex[0]",
+              "dataPath": "/rules/foo/regex/0",
               "schemaPath": "#/definitions/regex/items/pattern",
               "params": {
                 "pattern": "^/.+/[giu]*$"
@@ -120,7 +120,7 @@ test("should throw for empty regex array", async () => {
           [Error: configuration is invalid: [
             {
               "keyword": "minItems",
-              "dataPath": ".rules['foo'].regex",
+              "dataPath": "/rules/foo/regex",
               "schemaPath": "#/definitions/regex/minItems",
               "params": {
                 "limit": 1
@@ -218,7 +218,7 @@ test("should throw for invalid flags", async () => {
           [Error: configuration is invalid: [
             {
               "keyword": "pattern",
-              "dataPath": ".rules['foo'].regex[0]",
+              "dataPath": "/rules/foo/regex/0",
               "schemaPath": "#/definitions/regex/items/pattern",
               "params": {
                 "pattern": "^/.+/[giu]*$"
