@@ -63,6 +63,13 @@ rules:
     alternatives:
       - person-hours
       - human-hours
+  dummy:
+    regex:
+      - /dummy/gi
+    level: warning
+    alternatives:
+      - placeholder
+      - indicator
 ignore:
   - .github/in-solidarity.yml
 defaultMessage: >

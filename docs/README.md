@@ -80,6 +80,7 @@ The following are the default rules.
 |[grandfathered](rules/grandfathered.md)  | `warning`  |
 |[sanity_check](rules/sanity_check.md)  | `warning`  |
 |[man_hours](rules/man_hours.md)  | `warning`  |
+|[dummy](rules/dummy.md)  | `warning`  |
 
 > **Note**: Additional rules are welcome and can be added in [src/rules.ts](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/src/rules.ts).
 
