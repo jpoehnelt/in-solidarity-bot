@@ -38,7 +38,7 @@
     "handlebars": "^4.7.6",
     "js-yaml": "^4.0.0",
     "minimatch": "^3.0.4",
-    "probot": "^11.0.1",
+    "probot": "^12.0.0",
     "regex-parser": "^2.2.11"
   },
   "devDependencies": {
