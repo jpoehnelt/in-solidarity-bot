@@ -66,17 +66,17 @@ export const DEFAULT_RULES: { [key: string]: Rule } = {
   },
   grandfathered: {
     regex: [/grandfathered/gi],
-    level: Level.WARNING,
+    level: Level.OFF,
     alternatives: ["legacied", "exempted"],
   },
   sanity_check: {
     regex: [/sanity[_-]*check/gi],
-    level: Level.WARNING,
+    level: Level.OFF,
     alternatives: ["smoke test", "confidence check"],
   },
   man_hours: {
     regex: [/man[_-]*hours/gi],
-    level: Level.WARNING,
+    level: Level.OFF,
     alternatives: ["person-hours", "human-hours"],
   },
 };
