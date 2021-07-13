@@ -167,6 +167,24 @@
               "type": "string"
             }
           }
+        },
+        "dummy": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "level": {
+              "$ref": "#/definitions/level"
+            },
+            "alternatives": {
+              "$ref": "#/definitions/alternatives"
+            },
+            "regex": {
+              "$ref": "#/definitions/regex"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
         }
       },
       "additionalProperties": {

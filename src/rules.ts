@@ -79,4 +79,9 @@ export const DEFAULT_RULES: { [key: string]: Rule } = {
     level: Level.WARNING,
     alternatives: ["person-hours", "human-hours"],
   },
+  dummy: {
+    regex: [/dummy/gi],
+    level: Level.WARNING,
+    alternatives: ["placeholder", "indicator"],
+  },
 };
