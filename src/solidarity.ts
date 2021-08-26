@@ -33,7 +33,8 @@ import path from "path";
 import pino from "pino";
 import { version } from "../package.json";
 
-type ChecksCreateParams = RestEndpointMethodTypes["checks"]["create"]["parameters"];
+type ChecksCreateParams =
+  RestEndpointMethodTypes["checks"]["create"]["parameters"];
 
 export type ChecksUpdateParamsOutput = {
   title: string;
@@ -241,7 +242,7 @@ export class Solidarity {
       headers: { accept: "application/vnd.github.v3.diff" },
     });
 
-    const diff = (response.data as unknown) as string;
+    const diff = response.data as unknown as string;
 
     return parse(diff);
   }
