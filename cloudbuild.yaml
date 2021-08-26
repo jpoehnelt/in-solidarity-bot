@@ -31,7 +31,7 @@ steps:
         "deploy",
         "in-solidarity-bot-$BRANCH_NAME",
         "--image",
-        "gcr.io/$PROJECT_ID/in-solidarity-bot:$SHORT_SHA",
+        "gcr.io/$PROJECT_ID/in-solidarity-bot:$BRANCH_NAME-$SHORT_SHA",
         "--region",
         "us-central1",
         "--platform",
