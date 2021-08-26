@@ -18,18 +18,11 @@ import { Context, Probot } from "probot";
 import { Solidarity } from "./solidarity";
 
 module.exports = async (app: Probot) => {
-  app.on(
-    [
-      "pull_request.opened",
-      "pull_request.reopened",
-      "pull_request.synchronize",
-    ],
-    async (context: Context) => {
-      await run(context);
-    }
-  );
+  app.on("pull_request.opened", run);
+  app.on("pull_request.reopened", run);
+  app.on("pull_request.synchronize", run);
 
-  async function run(context: Context) {
+  async function run(context: Context<"pull_request">) {
     const solidarity = new Solidarity(context);
     await solidarity.run();
   }

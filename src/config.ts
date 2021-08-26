@@ -52,7 +52,9 @@ export const DEFAULT_CONFIGURATION: Configuration = {
 
 const CONFIG_FILE = "in-solidarity.yml";
 
-export const getConfig = async (context: Context): Promise<Configuration> => {
+export const getConfig = async (
+  context: Context<"pull_request">
+): Promise<Configuration> => {
   const validate = ajv.compile(schema);
 
   const repoConfig = (await context.config(CONFIG_FILE)) as RepoConfiguration;
