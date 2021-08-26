@@ -3,7 +3,7 @@
 This rule uses the following patterns: 
 * `/man[_-]*hours/gi`
 
-It has a default check level of: `warning`
+It has a default check level of: `off`
 
 ## Alternatives
 * `person-hours`

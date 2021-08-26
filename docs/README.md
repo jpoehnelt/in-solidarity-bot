@@ -77,9 +77,9 @@ The following are the default rules.
 |[slave](rules/slave.md)  | `warning`  |
 |[whitelist](rules/whitelist.md)  | `warning`  |
 |[blacklist](rules/blacklist.md)  | `warning`  |
-|[grandfathered](rules/grandfathered.md)  | `warning`  |
-|[sanity_check](rules/sanity_check.md)  | `warning`  |
-|[man_hours](rules/man_hours.md)  | `warning`  |
+|[grandfathered](rules/grandfathered.md)  | `off`  |
+|[sanity_check](rules/sanity_check.md)  | `off`  |
+|[man_hours](rules/man_hours.md)  | `off`  |
 
 > **Note**: Additional rules are welcome and can be added in [src/rules.ts](https://github.com/jpoehnelt/in-solidarity-bot/blob/main/src/rules.ts).
 

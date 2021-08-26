@@ -3,7 +3,7 @@
 This rule uses the following patterns: 
 * `/sanity[_-]*check/gi`
 
-It has a default check level of: `warning`
+It has a default check level of: `off`
 
 ## Alternatives
 * `smoke test`
