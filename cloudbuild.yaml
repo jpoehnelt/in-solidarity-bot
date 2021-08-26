@@ -21,9 +21,9 @@ steps:
     - |-
       gcloud secrets versions access 1 --secret $BRANCH_NAME-key-pem > key.pem
   - name: "gcr.io/cloud-builders/docker"
-    args: ["build","--build-arg", "SHA=$SHORT_SHA", "-t", "gcr.io/$PROJECT_ID/in-solidarity-bot:$BRANCH_NAME_$SHORT_SHA", "."]
+    args: ["build","--build-arg", "SHA=$SHORT_SHA", "-t", "gcr.io/$PROJECT_ID/in-solidarity-bot:$BRANCH_NAME-$SHORT_SHA", "."]
   - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/$PROJECT_ID/in-solidarity-bot:$BRANCH_NAME_$SHORT_SHA"]
+    args: ["push", "gcr.io/$PROJECT_ID/in-solidarity-bot:$BRANCH_NAME-$SHORT_SHA"]
   - name: "gcr.io/cloud-builders/gcloud"
     args:
       [
@@ -40,4 +40,4 @@ steps:
         "sha=$SHORT_SHA"
       ]
 images:
-  - gcr.io/$PROJECT_ID/in-solidarity-bot:$BRANCH_NAME_$SHORT_SHA
+  - gcr.io/$PROJECT_ID/in-solidarity-bot:$BRANCH_NAME-$SHORT_SHA
