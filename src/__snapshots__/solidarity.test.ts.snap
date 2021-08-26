@@ -45,21 +45,21 @@ rules:
   grandfathered:
     regex:
       - /grandfathered/gi
-    level: warning
+    level: 'off'
     alternatives:
       - legacied
       - exempted
   sanity_check:
     regex:
       - /sanity[_-]*check/gi
-    level: warning
+    level: 'off'
     alternatives:
       - smoke test
       - confidence check
   man_hours:
     regex:
       - /man[_-]*hours/gi
-    level: warning
+    level: 'off'
     alternatives:
       - person-hours
       - human-hours
