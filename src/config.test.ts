@@ -20,10 +20,10 @@ import { Context } from "probot";
 import fs from "fs";
 import yaml from "js-yaml";
 
-const fakeContext = ({
+const fakeContext = {
   config: async () =>
     yaml.load(fs.readFileSync("./fixtures/in-solidarity.yml", "utf8")),
-} as unknown) as Context;
+} as unknown as Context;
 
 test("should override default rules", async () => {
   const config = await getConfig(fakeContext);
@@ -36,7 +36,7 @@ test("should override default rules", async () => {
 });
 
 test("should allow changing default regex", async () => {
-  const context = ({
+  const context = {
     config: async () => {
       return {
         rules: {
@@ -46,13 +46,13 @@ test("should allow changing default regex", async () => {
         },
       };
     },
-  } as unknown) as Context;
+  } as unknown as Context;
   const config = await getConfig(context);
   expect(config.rules.master.regex[0]).toEqual(/MaStEr/g);
 });
 
 test("should override default alternatives", async () => {
-  const context = ({
+  const context = {
     config: async () => {
       return {
         rules: {
@@ -62,13 +62,13 @@ test("should override default alternatives", async () => {
         },
       };
     },
-  } as unknown) as Context;
+  } as unknown as Context;
   const config = await getConfig(context);
   expect(config.rules.master.alternatives).toEqual(["PRIMARY"]);
 });
 
 test("should throw for invalid regex pattern", async () => {
-  const context = ({
+  const context = {
     config: async () => {
       return {
         rules: {
@@ -78,7 +78,7 @@ test("should throw for invalid regex pattern", async () => {
         },
       };
     },
-  } as unknown) as Context;
+  } as unknown as Context;
   await expect(getConfig(context)).rejects.toMatchInlineSnapshot(`
           [Error: configuration is invalid: [
             {
@@ -104,7 +104,7 @@ test("should throw for invalid regex pattern", async () => {
 });
 
 test("should throw for empty regex array", async () => {
-  const context = ({
+  const context = {
     config: async () => {
       return {
         rules: {
@@ -115,7 +115,7 @@ test("should throw for empty regex array", async () => {
         },
       };
     },
-  } as unknown) as Context;
+  } as unknown as Context;
   await expect(getConfig(context)).rejects.toMatchInlineSnapshot(`
           [Error: configuration is invalid: [
             {
@@ -132,7 +132,7 @@ test("should throw for empty regex array", async () => {
 });
 
 test("should ignore defaults", async () => {
-  const context = ({
+  const context = {
     config: async () => {
       return {
         rules: {
@@ -144,7 +144,7 @@ test("should ignore defaults", async () => {
         ignoreDefaults: true,
       };
     },
-  } as unknown) as Context;
+  } as unknown as Context;
   const config = await getConfig(context);
   expect(config).toMatchInlineSnapshot(`
     Object {
@@ -170,13 +170,13 @@ test("should ignore defaults", async () => {
 });
 
 test("should throw if ignoring defaults without rules", async () => {
-  const context = ({
+  const context = {
     config: async () => {
       return {
         ignoreDefaults: true,
       };
     },
-  } as unknown) as Context;
+  } as unknown as Context;
   await expect(getConfig(context)).rejects.toMatchInlineSnapshot(`
           [Error: configuration is invalid: [
             {
@@ -202,7 +202,7 @@ test("should throw if ignoring defaults without rules", async () => {
 });
 
 test("should throw for invalid flags", async () => {
-  const context = ({
+  const context = {
     config: async () => {
       return {
         rules: {
@@ -213,7 +213,7 @@ test("should throw for invalid flags", async () => {
         },
       };
     },
-  } as unknown) as Context;
+  } as unknown as Context;
   await expect(getConfig(context)).rejects.toMatchInlineSnapshot(`
           [Error: configuration is invalid: [
             {
@@ -230,7 +230,7 @@ test("should throw for invalid flags", async () => {
 });
 
 test("should throw for invalid config having level at top", async () => {
-  const context = ({
+  const context = {
     config: async () => {
       return {
         rules: {
@@ -238,15 +238,15 @@ test("should throw for invalid config having level at top", async () => {
         },
       };
     },
-  } as unknown) as Context;
+  } as unknown as Context;
   await expect(getConfig(context)).rejects.toBeInstanceOf(InvalidConfigError);
 });
 
 test("should handle case where no repo config", async () => {
-  const context = ({
+  const context = {
     config: async () => {
       return;
     },
-  } as unknown) as Context;
+  } as unknown as Context;
   await expect(getConfig(context)).resolves.toBe(DEFAULT_CONFIGURATION);
 });
