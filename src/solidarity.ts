@@ -69,12 +69,12 @@ export enum OutputTitle {
 export const logger = pino();
 
 export class Solidarity {
-  private context: Context;
+  private context: Context<"pull_request">;
   private logger: pino.Logger;
   private checkId?: number;
   config?: Configuration;
 
-  constructor(context: Context) {
+  constructor(context: Context<"pull_request">) {
     this.context = context;
     this.logger = logger.child({
       version,

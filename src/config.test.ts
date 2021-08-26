@@ -23,7 +23,7 @@ import yaml from "js-yaml";
 const fakeContext = {
   config: async () =>
     yaml.load(fs.readFileSync("./fixtures/in-solidarity.yml", "utf8")),
-} as unknown as Context;
+} as unknown as Context<"pull_request">;
 
 test("should override default rules", async () => {
   const config = await getConfig(fakeContext);
@@ -46,7 +46,7 @@ test("should allow changing default regex", async () => {
         },
       };
     },
-  } as unknown as Context;
+  } as unknown as Context<"pull_request">;
   const config = await getConfig(context);
   expect(config.rules.master.regex[0]).toEqual(/MaStEr/g);
 });
@@ -62,7 +62,7 @@ test("should override default alternatives", async () => {
         },
       };
     },
-  } as unknown as Context;
+  } as unknown as Context<"pull_request">;
   const config = await getConfig(context);
   expect(config.rules.master.alternatives).toEqual(["PRIMARY"]);
 });
@@ -78,7 +78,7 @@ test("should throw for invalid regex pattern", async () => {
         },
       };
     },
-  } as unknown as Context;
+  } as unknown as Context<"pull_request">;
   await expect(getConfig(context)).rejects.toMatchInlineSnapshot(`
           [Error: configuration is invalid: [
             {
@@ -115,7 +115,7 @@ test("should throw for empty regex array", async () => {
         },
       };
     },
-  } as unknown as Context;
+  } as unknown as Context<"pull_request">;
   await expect(getConfig(context)).rejects.toMatchInlineSnapshot(`
           [Error: configuration is invalid: [
             {
@@ -144,7 +144,7 @@ test("should ignore defaults", async () => {
         ignoreDefaults: true,
       };
     },
-  } as unknown as Context;
+  } as unknown as Context<"pull_request">;
   const config = await getConfig(context);
   expect(config).toMatchInlineSnapshot(`
     Object {
@@ -176,7 +176,7 @@ test("should throw if ignoring defaults without rules", async () => {
         ignoreDefaults: true,
       };
     },
-  } as unknown as Context;
+  } as unknown as Context<"pull_request">;
   await expect(getConfig(context)).rejects.toMatchInlineSnapshot(`
           [Error: configuration is invalid: [
             {
@@ -213,7 +213,7 @@ test("should throw for invalid flags", async () => {
         },
       };
     },
-  } as unknown as Context;
+  } as unknown as Context<"pull_request">;
   await expect(getConfig(context)).rejects.toMatchInlineSnapshot(`
           [Error: configuration is invalid: [
             {
@@ -238,7 +238,7 @@ test("should throw for invalid config having level at top", async () => {
         },
       };
     },
-  } as unknown as Context;
+  } as unknown as Context<"pull_request">;
   await expect(getConfig(context)).rejects.toBeInstanceOf(InvalidConfigError);
 });
 
@@ -247,6 +247,6 @@ test("should handle case where no repo config", async () => {
     config: async () => {
       return;
     },
-  } as unknown as Context;
+  } as unknown as Context<"pull_request">;
   await expect(getConfig(context)).resolves.toBe(DEFAULT_CONFIGURATION);
 });
