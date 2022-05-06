@@ -45,7 +45,7 @@ export enum Level {
 
 export const DEFAULT_RULES: { [key: string]: Rule } = {
   master: {
-    regex: [/master/gi],
+    regex: [/(?<!\/)master/gi],
     level: Level.WARNING,
     alternatives: ["primary", "main", "leader", "active", "writer"],
   },
