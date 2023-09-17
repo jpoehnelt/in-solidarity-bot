@@ -40,7 +40,7 @@ jobs:
             "@semantic-release/git"
             "@semantic-release/github"
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_AUTHOR_NAME: Justin Poehnelt
           GIT_AUTHOR_EMAIL: 3392975+jpoehnelt@users.noreply.github.com
           GIT_COMMITTER_NAME: Justin Poehnelt
