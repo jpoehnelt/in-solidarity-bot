@@ -20,10 +20,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: write
     steps:
       - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.RELEASE_TOKEN }}
       - run: npm ci
       - run: npm run build
       - run: npm run docs
@@ -38,7 +39,6 @@ jobs:
             "@semantic-release/release-notes-generator"
             "@semantic-release/git"
             "@semantic-release/github"
-            "@semantic-release/npm"
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
           GIT_AUTHOR_NAME: Justin Poehnelt
