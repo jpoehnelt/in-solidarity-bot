@@ -32,7 +32,7 @@ jobs:
       - run: npm test
       - run: docker build . --file Dockerfile
       - name: Release
-        uses: cycjimmy/semantic-release-action@v2
+        uses: cycjimmy/semantic-release-action@v4
         with:
           extra_plugins: |
             "@semantic-release/commit-analyzer"
