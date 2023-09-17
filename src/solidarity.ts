@@ -158,7 +158,7 @@ export class Solidarity {
       conclusion = check.conclusion;
       output = check.output;
     } catch (e) {
-      if (e.status === 403) {
+      if ((e as any).status === 403) {
         output = {
           title: OutputTitle.PERMISSION_NEEDED,
           summary: this.summary(
