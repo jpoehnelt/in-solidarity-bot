@@ -37,7 +37,7 @@
     "gitdiff-parser": "^0.2.2",
     "handlebars": "^4.7.6",
     "js-yaml": "^4.0.0",
-    "minimatch": "^3.0.4",
+    "minimatch": "^9.0.3",
     "probot": "^12.1.0",
     "regex-parser": "^2.2.11"
   },
